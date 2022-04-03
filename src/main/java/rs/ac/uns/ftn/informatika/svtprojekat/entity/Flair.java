@@ -20,10 +20,13 @@ public class Flair {
     @Column(name = "flair_name", unique = true, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "flair", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Post> posts = new HashSet<Post>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "community_flair",
+            joinColumns = @JoinColumn(name = "flair_id", referencedColumnName = "flair_id"),
+            inverseJoinColumns = @JoinColumn(name = "community_id", referencedColumnName = "community_id"))
     private Set<Community> communities = new HashSet<Community>();
 
     public Flair() {

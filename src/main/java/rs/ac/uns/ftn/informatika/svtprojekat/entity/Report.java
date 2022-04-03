@@ -21,7 +21,8 @@ public class Report {
     @Column(name = "report_timestamp", unique = true, nullable = false)
     private LocalDate timestamp;
 
-    @Column(name = "report_user", unique = true, nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User byUser;
 
     @Column(name = "report_accepted", unique = true, nullable = false)

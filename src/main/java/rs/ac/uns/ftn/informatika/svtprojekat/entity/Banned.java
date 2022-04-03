@@ -19,12 +19,13 @@ public class Banned {
     @Column(name = "banned_timestamp", unique = true, nullable = false)
     private LocalDate timestamp;
 
-    @Column(name = "banned_moderator", unique = true, nullable = false)
-    private Moderator by;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "moderator_id")
+    private Moderator moderator;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "community_id")
@@ -57,14 +58,6 @@ public class Banned {
         this.timestamp = timestamp;
     }
 
-    public Moderator getBy() {
-        return by;
-    }
-
-    public void setBy(Moderator by) {
-        this.by = by;
-    }
-
     public User getUser() {
         return user;
     }
@@ -73,17 +66,25 @@ public class Banned {
         this.user = user;
     }
 
+    public Moderator getModerator() {
+        return moderator;
+    }
+
+    public void setModerator(Moderator moderator) {
+        this.moderator = moderator;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Banned)) return false;
         Banned banned = (Banned) o;
-        return Objects.equals(getId(), banned.getId()) && Objects.equals(getTimestamp(), banned.getTimestamp()) && Objects.equals(getBy(), banned.getBy()) && Objects.equals(getUser(), banned.getUser()) && Objects.equals(getCommunity(), banned.getCommunity());
+        return Objects.equals(getId(), banned.getId()) && Objects.equals(getTimestamp(), banned.getTimestamp()) && Objects.equals(getModerator(), banned.getModerator()) && Objects.equals(getUser(), banned.getUser()) && Objects.equals(getCommunity(), banned.getCommunity());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTimestamp(), getBy(), getUser(), getCommunity());
+        return Objects.hash(getId(), getTimestamp(), getModerator(), getUser(), getCommunity());
     }
 
     @Override
@@ -91,7 +92,7 @@ public class Banned {
         return "Banned{" +
                 "id=" + id +
                 ", timestamp=" + timestamp +
-                ", by=" + by +
+                ", by=" + moderator +
                 ", user=" + user +
                 ", community=" + community +
                 '}';

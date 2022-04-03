@@ -26,7 +26,9 @@ public class Community {
     @Column(name = "community_creationDate", unique = true, nullable = false)
     private String creationDate;
 
-    @Column(name = "community_rules", unique = true, nullable = false)
+    @ElementCollection
+    @CollectionTable(name = "community_rules", joinColumns = @JoinColumn(name = "community_id")) // 2
+    @Column(name = "rule")
     private List<String> rules;
 
     @Column(name = "community_isSuspended", unique = true, nullable = false)
@@ -41,10 +43,10 @@ public class Community {
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Banned> banned = new HashSet<Banned>();
 
-    @ManyToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "communities", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Flair> flairs = new HashSet<Flair>();
 
-    @ManyToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "communities", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Moderator> moderators = new HashSet<Moderator>();
 
     public Community() {
@@ -80,14 +82,6 @@ public class Community {
 
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public List<String> getRules() {
-        return rules;
-    }
-
-    public void setRules(List<String> rules) {
-        this.rules = rules;
     }
 
     public boolean isSuspended() {
@@ -138,33 +132,5 @@ public class Community {
         this.moderators = moderators;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Community)) return false;
-        Community community = (Community) o;
-        return isSuspended() == community.isSuspended() && Objects.equals(getId(), community.getId()) && Objects.equals(getName(), community.getName()) && Objects.equals(getDescription(), community.getDescription()) && Objects.equals(getCreationDate(), community.getCreationDate()) && Objects.equals(getRules(), community.getRules()) && Objects.equals(getSuspendedReason(), community.getSuspendedReason()) && Objects.equals(getPosts(), community.getPosts()) && Objects.equals(getBanned(), community.getBanned()) && Objects.equals(getFlairs(), community.getFlairs()) && Objects.equals(getModerators(), community.getModerators());
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getDescription(), getCreationDate(), getRules(), isSuspended(), getSuspendedReason(), getPosts(), getBanned(), getFlairs(), getModerators());
-    }
-
-    @Override
-    public String toString() {
-        return "Community{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", creationDate='" + creationDate + '\'' +
-                ", rules=" + rules +
-                ", isSuspended=" + isSuspended +
-                ", suspendedReason='" + suspendedReason + '\'' +
-                ", posts=" + posts +
-                ", banned=" + banned +
-                ", flairs=" + flairs +
-                ", moderators=" + moderators +
-                '}';
-    }
 }
