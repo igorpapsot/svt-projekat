@@ -1,7 +1,10 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -14,17 +17,120 @@ public class Community {
     @Column(name = "community_id", unique = true, nullable = false)
     private Integer id;
 
+    @Column(name = "community_name", unique = true, nullable = false)
     private String name;
 
+    @Column(name = "community_description", unique = true, nullable = false)
     private String description;
 
+    @Column(name = "community_creationDate", unique = true, nullable = false)
     private String creationDate;
 
+    @ElementCollection
+    @CollectionTable(name = "community_rules", joinColumns = @JoinColumn(name = "community_id")) // 2
+    @Column(name = "rule")
     private List<String> rules;
 
+    @Column(name = "community_isSuspended", unique = true, nullable = false)
     private boolean isSuspended;
 
+    @Column(name = "community_suspendedReason", unique = true, nullable = false)
     private String suspendedReason;
+
+    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Post> posts = new HashSet<Post>();
+
+    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Banned> banned = new HashSet<Banned>();
+
+    @ManyToMany(mappedBy = "communities", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Flair> flairs = new HashSet<Flair>();
+
+    @ManyToMany(mappedBy = "communities", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Moderator> moderators = new HashSet<Moderator>();
+
+    public Community() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public boolean isSuspended() {
+        return isSuspended;
+    }
+
+    public void setSuspended(boolean suspended) {
+        isSuspended = suspended;
+    }
+
+    public String getSuspendedReason() {
+        return suspendedReason;
+    }
+
+    public void setSuspendedReason(String suspendedReason) {
+        this.suspendedReason = suspendedReason;
+    }
+
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
+    }
+
+    public Set<Banned> getBanned() {
+        return banned;
+    }
+
+    public void setBanned(Set<Banned> banned) {
+        this.banned = banned;
+    }
+
+    public Set<Flair> getFlairs() {
+        return flairs;
+    }
+
+    public void setFlairs(Set<Flair> flairs) {
+        this.flairs = flairs;
+    }
+
+    public Set<Moderator> getModerators() {
+        return moderators;
+    }
+
+    public void setModerators(Set<Moderator> moderators) {
+        this.moderators = moderators;
+    }
 
 
 }
