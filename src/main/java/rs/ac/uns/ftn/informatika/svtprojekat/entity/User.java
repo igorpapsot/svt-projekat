@@ -37,17 +37,17 @@ public class User {
     @Column(name = "user_isBanned", unique = true, nullable = false)
     private boolean isBanned;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Comment> comments = new HashSet<Comment>();
+    //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //    private Set<Comment> comments = new HashSet<Comment>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Reaction> reactions = new HashSet<Reaction>();
+    //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //    private Set<Reaction> reactions = new HashSet<Reaction>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Post> posts = new HashSet<Post>();
+    //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //    private Set<Post> posts = new HashSet<Post>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Banned> bannedList = new HashSet<Banned>();
+    //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //    private Set<Banned> bannedList = new HashSet<Banned>();
 
     public User() {
     }
@@ -108,49 +108,17 @@ public class User {
         isBanned = banned;
     }
 
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public Set<Reaction> getReactions() {
-        return reactions;
-    }
-
-    public void setReactions(Set<Reaction> reactions) {
-        this.reactions = reactions;
-    }
-
-    public Set<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
-    }
-
-    public Set<Banned> getBannedList() {
-        return bannedList;
-    }
-
-    public void setBannedList(Set<Banned> bannedList) {
-        this.bannedList = bannedList;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return isBanned() == user.isBanned() && Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getAvatar(), user.getAvatar()) && Objects.equals(getRegistrationDate(), user.getRegistrationDate()) && Objects.equals(getComments(), user.getComments()) && Objects.equals(getReactions(), user.getReactions()) && Objects.equals(getPosts(), user.getPosts()) && Objects.equals(getBannedList(), user.getBannedList());
+        return isBanned() == user.isBanned() && Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getAvatar(), user.getAvatar()) && Objects.equals(getRegistrationDate(), user.getRegistrationDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUsername(), getPassword(), getEmail(), getAvatar(), getRegistrationDate(), isBanned(), getComments(), getReactions(), getPosts(), getBannedList());
+        return Objects.hash(getId(), getUsername(), getPassword(), getEmail(), getAvatar(), getRegistrationDate(), isBanned());
     }
 
     @Override
@@ -163,10 +131,6 @@ public class User {
                 ", avatar='" + avatar + '\'' +
                 ", registrationDate=" + registrationDate +
                 ", isBanned=" + isBanned +
-                ", comments=" + comments +
-                ", reactions=" + reactions +
-                ", posts=" + posts +
-                ", bannedList=" + bannedList +
                 '}';
     }
 }

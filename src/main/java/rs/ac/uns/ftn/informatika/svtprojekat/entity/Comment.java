@@ -23,10 +23,10 @@ public class Comment {
     @Column(name = "comment_timestamp", unique = true, nullable = false)
     private LocalDate timestamp;
 
-    @Column(name = "comment_isDeleted", unique = true, nullable = false)
+    @Column(name = "comment_is_deleted", unique = true, nullable = false)
     private boolean isDeleted;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -35,14 +35,14 @@ public class Comment {
     private Post post;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "repliesTo")
+    @JoinColumn(name = "replies_to")
     private Set<Comment> comments = new HashSet<Comment>();
 
-    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Reaction> reactions = new HashSet<Reaction>();
+//    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Set<Reaction> reactions = new HashSet<Reaction>();
 
-    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Report> reports = new HashSet<Report>();
+//    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Set<Report> reports = new HashSet<Report>();
 
     public Comment() {
     }
@@ -103,33 +103,17 @@ public class Comment {
         this.post = post;
     }
 
-    public Set<Reaction> getReactions() {
-        return reactions;
-    }
-
-    public void setReactions(Set<Reaction> reactions) {
-        this.reactions = reactions;
-    }
-
-    public Set<Report> getReports() {
-        return reports;
-    }
-
-    public void setReports(Set<Report> reports) {
-        this.reports = reports;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Comment)) return false;
         Comment comment = (Comment) o;
-        return isDeleted() == comment.isDeleted() && Objects.equals(getId(), comment.getId()) && Objects.equals(getText(), comment.getText()) && Objects.equals(getTimestamp(), comment.getTimestamp()) && Objects.equals(getUser(), comment.getUser()) && Objects.equals(getPost(), comment.getPost()) && Objects.equals(getComments(), comment.getComments()) && Objects.equals(getReactions(), comment.getReactions()) && Objects.equals(getReports(), comment.getReports());
+        return isDeleted() == comment.isDeleted() && Objects.equals(getId(), comment.getId()) && Objects.equals(getText(), comment.getText()) && Objects.equals(getTimestamp(), comment.getTimestamp()) && Objects.equals(getUser(), comment.getUser()) && Objects.equals(getPost(), comment.getPost()) && Objects.equals(getComments(), comment.getComments());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getText(), getTimestamp(), isDeleted(), getUser(), getPost(), getComments(), getReactions(), getReports());
+        return Objects.hash(getId(), getText(), getTimestamp(), isDeleted(), getUser(), getPost(), getComments());
     }
 
     @Override
@@ -142,8 +126,6 @@ public class Comment {
                 ", user=" + user +
                 ", post=" + post +
                 ", comments=" + comments +
-                ", reactions=" + reactions +
-                ", reports=" + reports +
                 '}';
     }
 }

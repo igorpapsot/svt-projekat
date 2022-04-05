@@ -10,15 +10,15 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "moderator")
-public class Moderator extends User{
+public class Moderator{
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "moderator_id", unique = true, nullable = false)
     private Integer id;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Community> communities = new HashSet<Community>();
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Set<Community> communities = new HashSet<Community>();
 
     public Moderator() {
     }
@@ -36,19 +36,18 @@ public class Moderator extends User{
         if (this == o) return true;
         if (!(o instanceof Moderator)) return false;
         Moderator moderator = (Moderator) o;
-        return Objects.equals(getId(), moderator.getId()) && Objects.equals(communities, moderator.communities);
+        return Objects.equals(getId(), moderator.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), communities);
+        return Objects.hash(getId());
     }
 
     @Override
     public String toString() {
         return "Moderator{" +
                 "id=" + id +
-                ", communities=" + communities +
                 '}';
     }
 }

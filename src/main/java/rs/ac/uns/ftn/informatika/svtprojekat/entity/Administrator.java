@@ -8,7 +8,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "administrator")
-public class Administrator extends User{
+public class Administrator{
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -18,12 +18,11 @@ public class Administrator extends User{
     public Administrator() {
     }
 
-    @Override
+
     public Integer getId() {
         return id;
     }
 
-    @Override
     public void setId(Integer id) {
         this.id = id;
     }

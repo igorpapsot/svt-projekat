@@ -23,7 +23,7 @@ public class Community {
     @Column(name = "community_description", unique = true, nullable = false)
     private String description;
 
-    @Column(name = "community_creationDate", unique = true, nullable = false)
+    @Column(name = "community_creation_date", unique = true, nullable = false)
     private String creationDate;
 
     @ElementCollection
@@ -31,22 +31,22 @@ public class Community {
     @Column(name = "rule")
     private List<String> rules;
 
-    @Column(name = "community_isSuspended", unique = true, nullable = false)
+    @Column(name = "community_is_suspended", unique = true, nullable = false)
     private boolean isSuspended;
 
-    @Column(name = "community_suspendedReason", unique = true, nullable = false)
+    @Column(name = "community_suspended_reason", unique = true, nullable = false)
     private String suspendedReason;
 
-    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Post> posts = new HashSet<Post>();
 
-    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Banned> banned = new HashSet<Banned>();
+//    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Set<Banned> banned = new HashSet<Banned>();
 
     @ManyToMany(mappedBy = "communities", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Flair> flairs = new HashSet<Flair>();
 
-    @ManyToMany(mappedBy = "communities", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Moderator> moderators = new HashSet<Moderator>();
 
     public Community() {
@@ -108,14 +108,6 @@ public class Community {
         this.posts = posts;
     }
 
-    public Set<Banned> getBanned() {
-        return banned;
-    }
-
-    public void setBanned(Set<Banned> banned) {
-        this.banned = banned;
-    }
-
     public Set<Flair> getFlairs() {
         return flairs;
     }
@@ -132,5 +124,32 @@ public class Community {
         this.moderators = moderators;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Community)) return false;
+        Community community = (Community) o;
+        return isSuspended() == community.isSuspended() && Objects.equals(getId(), community.getId()) && Objects.equals(getName(), community.getName()) && Objects.equals(getDescription(), community.getDescription()) && Objects.equals(getCreationDate(), community.getCreationDate()) && Objects.equals(rules, community.rules) && Objects.equals(getSuspendedReason(), community.getSuspendedReason()) && Objects.equals(getPosts(), community.getPosts()) && Objects.equals(getFlairs(), community.getFlairs()) && Objects.equals(getModerators(), community.getModerators());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getDescription(), getCreationDate(), rules, isSuspended(), getSuspendedReason(), getPosts(), getFlairs(), getModerators());
+    }
+
+    @Override
+    public String toString() {
+        return "Community{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", creationDate='" + creationDate + '\'' +
+                ", rules=" + rules +
+                ", isSuspended=" + isSuspended +
+                ", suspendedReason='" + suspendedReason + '\'' +
+                ", posts=" + posts +
+                ", flairs=" + flairs +
+                ", moderators=" + moderators +
+                '}';
+    }
 }

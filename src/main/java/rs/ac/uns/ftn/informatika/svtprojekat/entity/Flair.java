@@ -20,8 +20,8 @@ public class Flair {
     @Column(name = "flair_name", unique = true, nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Post> posts = new HashSet<Post>();
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Set<Post> posts = new HashSet<Post>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "community_flair",
@@ -48,14 +48,6 @@ public class Flair {
         this.name = name;
     }
 
-    public Set<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
-    }
-
     public Set<Community> getCommunities() {
         return communities;
     }
@@ -65,16 +57,12 @@ public class Flair {
         if (this == o) return true;
         if (!(o instanceof Flair)) return false;
         Flair flair = (Flair) o;
-        return Objects.equals(getId(), flair.getId()) && Objects.equals(getName(), flair.getName()) && Objects.equals(getPosts(), flair.getPosts()) && Objects.equals(getCommunities(), flair.getCommunities());
+        return Objects.equals(getId(), flair.getId()) && Objects.equals(getName(), flair.getName()) && Objects.equals(getCommunities(), flair.getCommunities());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getPosts(), getCommunities());
-    }
-
-    public void setCommunities(Set<Community> communities) {
-        this.communities = communities;
+        return Objects.hash(getId(), getName(), getCommunities());
     }
 
     @Override
@@ -82,7 +70,6 @@ public class Flair {
         return "Flair{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", posts=" + posts +
                 ", communities=" + communities +
                 '}';
     }
