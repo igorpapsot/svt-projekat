@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +12,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "community")
+@Data
 public class Community {
 
     @Id
@@ -40,9 +43,6 @@ public class Community {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Post> posts = new HashSet<Post>();
 
-//    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Set<Banned> banned = new HashSet<Banned>();
-
     @ManyToMany(mappedBy = "communities", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Flair> flairs = new HashSet<Flair>();
 
@@ -52,104 +52,4 @@ public class Community {
     public Community() {
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public boolean isSuspended() {
-        return isSuspended;
-    }
-
-    public void setSuspended(boolean suspended) {
-        isSuspended = suspended;
-    }
-
-    public String getSuspendedReason() {
-        return suspendedReason;
-    }
-
-    public void setSuspendedReason(String suspendedReason) {
-        this.suspendedReason = suspendedReason;
-    }
-
-    public Set<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
-    }
-
-    public Set<Flair> getFlairs() {
-        return flairs;
-    }
-
-    public void setFlairs(Set<Flair> flairs) {
-        this.flairs = flairs;
-    }
-
-    public Set<Moderator> getModerators() {
-        return moderators;
-    }
-
-    public void setModerators(Set<Moderator> moderators) {
-        this.moderators = moderators;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Community)) return false;
-        Community community = (Community) o;
-        return isSuspended() == community.isSuspended() && Objects.equals(getId(), community.getId()) && Objects.equals(getName(), community.getName()) && Objects.equals(getDescription(), community.getDescription()) && Objects.equals(getCreationDate(), community.getCreationDate()) && Objects.equals(rules, community.rules) && Objects.equals(getSuspendedReason(), community.getSuspendedReason()) && Objects.equals(getPosts(), community.getPosts()) && Objects.equals(getFlairs(), community.getFlairs()) && Objects.equals(getModerators(), community.getModerators());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getDescription(), getCreationDate(), rules, isSuspended(), getSuspendedReason(), getPosts(), getFlairs(), getModerators());
-    }
-
-    @Override
-    public String toString() {
-        return "Community{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", creationDate='" + creationDate + '\'' +
-                ", rules=" + rules +
-                ", isSuspended=" + isSuspended +
-                ", suspendedReason='" + suspendedReason + '\'' +
-                ", posts=" + posts +
-                ", flairs=" + flairs +
-                ", moderators=" + moderators +
-                '}';
-    }
 }

@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "comment")
+@Data
 public class Comment {
 
     @Id
@@ -38,94 +41,7 @@ public class Comment {
     @JoinColumn(name = "replies_to")
     private Set<Comment> comments = new HashSet<Comment>();
 
-//    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Set<Reaction> reactions = new HashSet<Reaction>();
-
-//    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Set<Report> reports = new HashSet<Report>();
-
     public Comment() {
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public LocalDate getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDate timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User belongsTo) {
-        this.user = belongsTo;
-    }
-
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Comment)) return false;
-        Comment comment = (Comment) o;
-        return isDeleted() == comment.isDeleted() && Objects.equals(getId(), comment.getId()) && Objects.equals(getText(), comment.getText()) && Objects.equals(getTimestamp(), comment.getTimestamp()) && Objects.equals(getUser(), comment.getUser()) && Objects.equals(getPost(), comment.getPost()) && Objects.equals(getComments(), comment.getComments());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getText(), getTimestamp(), isDeleted(), getUser(), getPost(), getComments());
-    }
-
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                ", timestamp=" + timestamp +
-                ", isDeleted=" + isDeleted +
-                ", user=" + user +
-                ", post=" + post +
-                ", comments=" + comments +
-                '}';
-    }
 }

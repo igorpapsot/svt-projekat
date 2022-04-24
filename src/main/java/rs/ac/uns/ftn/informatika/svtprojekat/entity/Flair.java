@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "flair")
+@Data
 public class Flair {
 
     @Id
@@ -20,9 +23,6 @@ public class Flair {
     @Column(name = "flair_name", unique = true, nullable = false)
     private String name;
 
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Set<Post> posts = new HashSet<Post>();
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "community_flair",
             joinColumns = @JoinColumn(name = "flair_id", referencedColumnName = "flair_id"),
@@ -32,45 +32,4 @@ public class Flair {
     public Flair() {
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Community> getCommunities() {
-        return communities;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Flair)) return false;
-        Flair flair = (Flair) o;
-        return Objects.equals(getId(), flair.getId()) && Objects.equals(getName(), flair.getName()) && Objects.equals(getCommunities(), flair.getCommunities());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getCommunities());
-    }
-
-    @Override
-    public String toString() {
-        return "Flair{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", communities=" + communities +
-                '}';
-    }
 }

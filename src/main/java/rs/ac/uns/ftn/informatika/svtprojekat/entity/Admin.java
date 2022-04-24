@@ -4,23 +4,21 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "moderator")
+@Table(name = "administrator")
 @Data
-public class Moderator{
+public class Admin {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "moderator_id", unique = true, nullable = false)
+    @Column(name = "administrator_id", unique = true, nullable = false)
     private Integer id;
 
-    public Moderator() {
+    public Admin() {
     }
 
 }
