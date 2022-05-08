@@ -21,13 +21,13 @@ public class Comment implements Serializable {
     @Column(name = "comment_id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "comment_text", unique = true, nullable = false)
+    @Column(name = "text", nullable = false)
     private String text;
 
-    @Column(name = "comment_timestamp", unique = true, nullable = false)
+    @Column(name = "timestamp", nullable = false)
     private LocalDate timestamp;
 
-    @Column(name = "comment_is_deleted", unique = true, nullable = false)
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

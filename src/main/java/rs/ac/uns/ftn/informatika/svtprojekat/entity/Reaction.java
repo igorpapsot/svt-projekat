@@ -19,10 +19,10 @@ public class Reaction implements Serializable {
     @Column(name = "reaction_id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "reaction_reaction_type", unique = true, nullable = false)
+    @Column(name = "reaction_type", nullable = false)
     private ReactionType type;
 
-    @Column(name = "reaction_timestamp", unique = true, nullable = false)
+    @Column(name = "timestamp", nullable = false)
     private LocalDate timestamp;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

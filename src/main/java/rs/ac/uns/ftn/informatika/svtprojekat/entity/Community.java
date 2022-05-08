@@ -21,28 +21,26 @@ public class Community implements Serializable {
     @Column(name = "community_id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "community_name", nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "community_description", nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "community_creation_date", nullable = false)
+    @Column(name = "creation_date", nullable = false)
     private String creationDate;
-
-    @ElementCollection
-    @CollectionTable(name = "community_rules", joinColumns = @JoinColumn(name = "community_id")) // 2
-    @Column(name = "rule")
-    private List<String> rules;
 
     @Column(name = "community_is_suspended", nullable = false)
     private boolean isSuspended;
 
-    @Column(name = "community_suspended_reason")
+    @Column(name = "suspended_reason")
     private String suspendedReason;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Post> posts = new HashSet<Post>();
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Rule> rules = new HashSet<>();
 
     @ManyToMany(mappedBy = "communities", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Flair> flairs = new HashSet<Flair>();

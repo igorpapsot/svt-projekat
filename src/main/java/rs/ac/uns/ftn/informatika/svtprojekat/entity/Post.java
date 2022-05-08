@@ -21,16 +21,16 @@ public class Post implements Serializable {
     @Column(name = "post_id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "post_title", unique = true, nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "post_text", unique = true, nullable = false)
+    @Column(name = "text", nullable = false)
     private String text;
 
-    @Column(name = "post_creation_date", unique = true, nullable = false)
+    @Column(name = "creation_date", nullable = false)
     private LocalDate creationDate;
 
-    @Column(name = "post_image_path", unique = true, nullable = false)
+    @Column(name = "image_path", nullable = false)
     private String imagePath;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

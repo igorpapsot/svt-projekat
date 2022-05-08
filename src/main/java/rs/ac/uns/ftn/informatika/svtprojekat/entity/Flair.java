@@ -21,7 +21,7 @@ public class Flair implements Serializable {
     @Column(name = "flair_id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "flair_name", unique = true, nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

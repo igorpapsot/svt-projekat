@@ -18,18 +18,18 @@ public class Report implements Serializable {
     @Column(name = "report_id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "report_reason", unique = true, nullable = false)
+    @Column(name = "reason", nullable = false)
     private ReportReasonENUM reason;
 
-    @Column(name = "report_timestamp", unique = true, nullable = false)
+    @Column(name = "timestamp", nullable = false)
     private LocalDate timestamp;
+
+    @Column(name = "accepted", nullable = false)
+    private boolean accepted;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User byUser;
-
-    @Column(name = "report_accepted", unique = true, nullable = false)
-    private boolean accepted;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "comment_id")

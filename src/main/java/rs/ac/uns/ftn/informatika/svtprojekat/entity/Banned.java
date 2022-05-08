@@ -20,7 +20,7 @@ public class Banned implements Serializable {
     @Column(name = "banned_id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "banned_timestamp", unique = true, nullable = false)
+    @Column(name = "timestamp", nullable = false)
     private LocalDate timestamp;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

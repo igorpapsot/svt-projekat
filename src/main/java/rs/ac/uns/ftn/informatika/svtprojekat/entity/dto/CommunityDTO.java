@@ -1,10 +1,7 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.entity.dto;
 
 import lombok.Data;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Flair;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Moderator;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -22,7 +19,7 @@ public class CommunityDTO implements Serializable {
 
     private String creationDate;
 
-    private List<String> rules;
+    private Set<Rule> rules;
 
     private boolean isSuspended;
 
@@ -37,7 +34,7 @@ public class CommunityDTO implements Serializable {
     public CommunityDTO() {
     }
 
-    public CommunityDTO(Integer id, String name, String description, String creationDate, List<String> rules, boolean isSuspended, String suspendedReason, Set<Post> posts, Set<Flair> flairs, Set<Moderator> moderators) {
+    public CommunityDTO(Integer id, String name, String description, String creationDate, Set<Rule> rules, boolean isSuspended, String suspendedReason, Set<Post> posts, Set<Flair> flairs, Set<Moderator> moderators) {
         this.id = id;
         this.name = name;
         this.description = description;
