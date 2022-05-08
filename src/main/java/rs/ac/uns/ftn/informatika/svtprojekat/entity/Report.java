@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.informatika.svtprojekat.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -10,7 +11,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "report")
 @Data
-public class Report {
+public class Report implements Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

@@ -1,12 +1,14 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Banned;
 import rs.ac.uns.ftn.informatika.svtprojekat.repository.BannedRepository;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.BannedService;
 
 import java.util.List;
 
+@Service
 public class BannedServiceImpl implements BannedService {
 
     @Autowired

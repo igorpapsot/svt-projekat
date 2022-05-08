@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "banned")
 @Data
-public class Banned {
+public class Banned implements Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

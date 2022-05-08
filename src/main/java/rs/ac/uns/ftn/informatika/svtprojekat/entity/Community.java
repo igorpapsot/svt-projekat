@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.informatika.svtprojekat.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -13,20 +14,20 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "community")
 @Data
-public class Community {
+public class Community implements Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "community_id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "community_name", unique = true, nullable = false)
+    @Column(name = "community_name", nullable = false)
     private String name;
 
-    @Column(name = "community_description", unique = true, nullable = false)
+    @Column(name = "community_description", nullable = false)
     private String description;
 
-    @Column(name = "community_creation_date", unique = true, nullable = false)
+    @Column(name = "community_creation_date", nullable = false)
     private String creationDate;
 
     @ElementCollection
@@ -34,10 +35,10 @@ public class Community {
     @Column(name = "rule")
     private List<String> rules;
 
-    @Column(name = "community_is_suspended", unique = true, nullable = false)
+    @Column(name = "community_is_suspended", nullable = false)
     private boolean isSuspended;
 
-    @Column(name = "community_suspended_reason", unique = true, nullable = false)
+    @Column(name = "community_suspended_reason")
     private String suspendedReason;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

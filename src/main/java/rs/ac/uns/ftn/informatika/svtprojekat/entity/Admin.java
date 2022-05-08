@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -11,7 +12,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "administrator")
 @Data
-public class Admin {
+public class Admin extends User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

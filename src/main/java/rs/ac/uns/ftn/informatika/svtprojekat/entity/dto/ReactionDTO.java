@@ -6,10 +6,11 @@ import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.ReactionType;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
-public class ReactionDTO {
+public class ReactionDTO implements Serializable {
 
     private Integer id;
 

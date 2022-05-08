@@ -1,12 +1,14 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
 import rs.ac.uns.ftn.informatika.svtprojekat.repository.CommunityRepository;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.CommunityService;
 
 import java.util.List;
 
+@Service
 public class CommunityServiceImpl implements CommunityService {
 
     @Autowired
@@ -19,12 +21,12 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public Community findOne(Integer id) {
-        return null;
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     public List<Community> findAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override

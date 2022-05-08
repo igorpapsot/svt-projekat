@@ -3,10 +3,11 @@ package rs.ac.uns.ftn.informatika.svtprojekat.entity.dto;
 import lombok.Data;
 
 import javax.persistence.Column;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     private Integer id;
 

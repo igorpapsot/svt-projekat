@@ -3,17 +3,20 @@ package rs.ac.uns.ftn.informatika.svtprojekat.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Entity
+
 @Table(name = "user")
+@Entity
 @Data
-public class User {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue
     @Column(name = "user_id", unique = true, nullable = false)
     private Integer id;
 

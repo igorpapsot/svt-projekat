@@ -1,12 +1,14 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Moderator;
 import rs.ac.uns.ftn.informatika.svtprojekat.repository.ModeratorRepository;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.ModeratorService;
 
 import java.util.List;
 
+@Service
 public class ModeratorServiceImpl implements ModeratorService {
 
     @Autowired

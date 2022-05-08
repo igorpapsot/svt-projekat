@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -13,7 +14,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "flair")
 @Data
-public class Flair {
+public class Flair implements Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

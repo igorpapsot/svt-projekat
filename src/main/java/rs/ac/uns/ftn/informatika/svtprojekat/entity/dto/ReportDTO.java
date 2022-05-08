@@ -6,10 +6,11 @@ import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.ReportReasonENUM;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
-public class ReportDTO {
+public class ReportDTO implements Serializable {
 
     private Integer id;
 

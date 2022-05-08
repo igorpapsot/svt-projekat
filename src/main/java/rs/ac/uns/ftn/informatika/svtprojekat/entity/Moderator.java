@@ -4,16 +4,14 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.io.Serializable;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "moderator")
 @Data
-public class Moderator{
+public class Moderator extends User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

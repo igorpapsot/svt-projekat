@@ -5,12 +5,13 @@ import rs.ac.uns.ftn.informatika.svtprojekat.entity.Comment;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class CommentDTO {
+public class CommentDTO implements Serializable {
 
     private Integer id;
 
