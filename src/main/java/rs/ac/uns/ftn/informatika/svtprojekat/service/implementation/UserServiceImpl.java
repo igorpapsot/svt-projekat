@@ -29,11 +29,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        return null;
+        return repository.save(user);
     }
 
     @Override
     public void remove(Integer id) {
 
+    }
+
+    @Override
+    public User findUserByUsername(String username) {
+        return repository.findByUsername(username);
     }
 }

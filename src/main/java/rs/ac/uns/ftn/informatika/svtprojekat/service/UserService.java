@@ -16,4 +16,6 @@ public interface UserService {
 
     void remove(Integer id);
 
+    User findUserByUsername(String username);
+
 }
