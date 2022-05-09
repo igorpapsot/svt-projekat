@@ -24,6 +24,8 @@ public class UserDTO implements Serializable {
 
     private boolean isBanned;
 
+    private String repeatPassword;
+
     public UserDTO() {
     }
 

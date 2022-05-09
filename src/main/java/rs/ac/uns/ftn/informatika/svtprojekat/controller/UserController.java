@@ -3,10 +3,7 @@ package rs.ac.uns.ftn.informatika.svtprojekat.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.UserDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
@@ -59,5 +56,21 @@ public class UserController {
         else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PutMapping(consumes = "application/json")
+    public ResponseEntity changePassword(@RequestBody UserDTO userDTO) {
+        //Vrv dodaj da ne moze da se menjaju ostali parametri
+        //Ali vec radi jer se cuva user a ne userDTO
+        User user = userService.findOne(userDTO.getId());
+        if (userDTO.getPassword().equals(userDTO.getRepeatPassword()) && !userDTO.getPassword().equals(user.getPassword())) {
+            user.setPassword(userDTO.getPassword());
+            userService.save(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
     }
 }
