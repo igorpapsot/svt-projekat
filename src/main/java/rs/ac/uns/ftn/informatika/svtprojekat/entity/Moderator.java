@@ -11,7 +11,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "moderator")
 @Data
-public class Moderator extends User implements Serializable {
+public class Moderator implements Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

@@ -12,7 +12,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "user")
 @Entity
 @Data
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User implements Serializable {
 
     @Id
@@ -37,6 +36,10 @@ public class User implements Serializable {
 
     @Column(name = "is_banned", nullable = false)
     private boolean isBanned;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private RoleENUM role;
 
     public User() {
     }

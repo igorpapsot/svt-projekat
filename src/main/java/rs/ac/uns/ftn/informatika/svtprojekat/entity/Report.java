@@ -19,6 +19,7 @@ public class Report implements Serializable {
     private Integer id;
 
     @Column(name = "reason", nullable = false)
+    @Enumerated(EnumType.STRING)
     private ReportReasonENUM reason;
 
     @Column(name = "timestamp", nullable = false)
@@ -27,16 +28,16 @@ public class Report implements Serializable {
     @Column(name = "accepted", nullable = false)
     private boolean accepted;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User byUser;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "comment_id")
+    @ManyToOne
+    @JoinColumn(name = "comment_id", referencedColumnName = "comment_id", nullable = false)
     private Comment comment;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
+    @ManyToOne
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id", nullable = false)
     private Post post;
 
     public Report() {

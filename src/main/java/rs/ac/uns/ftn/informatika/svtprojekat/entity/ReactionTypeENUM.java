@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.entity;
 
-public enum ReactionType {
+public enum ReactionTypeENUM {
     UPVOTE,
     DOWNVOTE
 }

@@ -5,7 +5,6 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -20,21 +19,22 @@ public class Reaction implements Serializable {
     private Integer id;
 
     @Column(name = "reaction_type", nullable = false)
-    private ReactionType type;
+    @Enumerated(EnumType.STRING)
+    private ReactionTypeENUM type;
 
     @Column(name = "timestamp", nullable = false)
     private LocalDate timestamp;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "comment_id")
+    @ManyToOne
+    @JoinColumn(name = "comment_id", referencedColumnName = "comment_id", nullable = false)
     private Comment comment;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
+    @ManyToOne
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id", nullable = false)
     private Post post;
 
     public Reaction() {

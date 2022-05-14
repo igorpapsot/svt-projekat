@@ -3,7 +3,7 @@ package rs.ac.uns.ftn.informatika.svtprojekat.entity.dto;
 import lombok.Data;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Comment;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.ReactionType;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.ReactionTypeENUM;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
 
 import java.io.Serializable;
@@ -14,7 +14,7 @@ public class ReactionDTO implements Serializable {
 
     private Integer id;
 
-    private ReactionType type;
+    private ReactionTypeENUM type;
 
     private LocalDate timestamp;
 

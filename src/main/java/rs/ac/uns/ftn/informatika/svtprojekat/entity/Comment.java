@@ -34,10 +34,11 @@ public class Comment implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @ManyToOne
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id", nullable = false)
     private Post post;
 
+    //ovo nekako napraviti da radi
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "replies_to")
     private Set<Comment> comments = new HashSet<Comment>();

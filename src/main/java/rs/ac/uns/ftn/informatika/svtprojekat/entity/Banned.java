@@ -23,16 +23,16 @@ public class Banned implements Serializable {
     @Column(name = "timestamp", nullable = false)
     private LocalDate timestamp;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "moderator_id")
+    @ManyToOne
+    @JoinColumn(name = "moderator_id", referencedColumnName = "moderator_id", nullable = false)
     private Moderator moderator;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "community_id")
+    @ManyToOne
+    @JoinColumn(name = "community_id", referencedColumnName = "community_id", nullable = false)
     private Community community;
 
     public Banned() {
