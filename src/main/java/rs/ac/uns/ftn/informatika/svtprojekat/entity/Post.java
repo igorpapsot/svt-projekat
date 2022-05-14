@@ -33,12 +33,12 @@ public class Post implements Serializable {
     @Column(name = "image_path", nullable = false)
     private String imagePath;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "flair_id")
+    @ManyToOne
+    @JoinColumn(name = "flair_id", referencedColumnName = "flair_id", nullable = false)
     private Flair flair;
 
     public Post() {

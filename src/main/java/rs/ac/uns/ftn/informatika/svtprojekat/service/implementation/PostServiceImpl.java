@@ -29,11 +29,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post save(Post post) {
-        return null;
+        return repository.save(post);
     }
 
     @Override
     public void remove(Integer id) {
-
+        repository.deleteById(id);
     }
 }

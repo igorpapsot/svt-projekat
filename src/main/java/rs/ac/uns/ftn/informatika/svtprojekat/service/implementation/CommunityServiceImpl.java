@@ -31,11 +31,11 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public Community save(Community community) {
-        return null;
+        return repository.save(community);
     }
 
     @Override
     public void remove(Integer id) {
-
+        repository.deleteById(id);
     }
 }
