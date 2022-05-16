@@ -24,7 +24,7 @@ public class UserDTO implements Serializable {
 
     private boolean isBanned;
 
-    private String repeatPassword;
+    private String newPassword;
 
     public UserDTO() {
     }
@@ -32,7 +32,7 @@ public class UserDTO implements Serializable {
     public UserDTO(Integer id, String username, String password, String email, String avatar, LocalDate registrationDate, boolean isBanned) {
         this.id = id;
         this.username = username;
-        this.password = password;
+        this.password = newPassword;
         this.email = email;
         this.avatar = avatar;
         this.registrationDate = registrationDate;

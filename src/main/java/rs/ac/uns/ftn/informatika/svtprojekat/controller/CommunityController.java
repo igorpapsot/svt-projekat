@@ -31,6 +31,16 @@ public class CommunityController {
         return new ResponseEntity<>(communitiesDTO, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CommunityDTO> getCommunity(@PathVariable("id") Integer id) {
+        Community community = communityService.findOne(id);
+        if (community == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<CommunityDTO> postCommunity(@RequestBody CommunityDTO communityDTO){
         Community community = new Community();
@@ -43,6 +53,10 @@ public class CommunityController {
 //        community.setSuspended(communityDTO.isSuspended());
 //        community.setSuspendedReason(communityDTO.getSuspendedReason());
 
+        if(community.getDescription() == null || community.getName() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         communityService.save(community);
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.CREATED);
     }
@@ -52,11 +66,19 @@ public class CommunityController {
         if (communityDTO.getId() != null) {
             Community community = communityService.findOne(communityDTO.getId());
 
+            if(community == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
             community.setDescription(communityDTO.getDescription());
             community.setName(communityDTO.getName());
             community.setSuspended(communityDTO.isSuspended());
             community.setSuspendedReason(communityDTO.getSuspendedReason());
 //            community.setCreationDate(communityDTO.getCreationDate());
+
+            if(community.getDescription() == null || community.getName() == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
 
             communityService.save(community);
             return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
@@ -69,9 +91,13 @@ public class CommunityController {
         if (communityDTO.getId() != null) {
             Community community = communityService.findOne(communityDTO.getId());
 
+            if(community == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
             communityService.remove(community.getId());
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

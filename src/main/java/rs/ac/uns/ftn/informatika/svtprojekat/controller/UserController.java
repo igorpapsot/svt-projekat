@@ -26,18 +26,23 @@ public class UserController {
         user.setId(userDTO.getId());
         user.setRegistrationDate(userDTO.getRegistrationDate());
 
-        User usernameDb = userService.findUserByUsername(user.getUsername());
-        User idDB = userService.findOne(user.getId());
+        User usernameUser = userService.findUserByUsername(user.getUsername());
+        User idUser = userService.findOne(user.getId());
 
         // Dodati validaciju
+        if(user.getUsername() == null || user.getAvatar() == null ||
+            user.getEmail() == null || user.getPassword() == null ||
+            user.getId() == null || user.getRegistrationDate() == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
 
-        if(usernameDb == null && idDB == null) {
-            user = userService.save(user);
+        if(usernameUser == null && idUser == null) {
             System.out.println(user);
+            user = userService.save(user);
             return new ResponseEntity<>(new UserDTO(user), HttpStatus.CREATED);
         }
         else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -60,16 +65,17 @@ public class UserController {
 
     @PutMapping(consumes = "application/json")
     public ResponseEntity changePassword(@RequestBody UserDTO userDTO) {
-        //Vrv dodaj da ne moze da se menjaju ostali parametri
-        //Ali vec radi jer se cuva user a ne userDTO
         User user = userService.findOne(userDTO.getId());
-        if (userDTO.getPassword().equals(userDTO.getRepeatPassword()) && !userDTO.getPassword().equals(user.getPassword())) {
-            user.setPassword(userDTO.getPassword());
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (!user.getPassword().equals(userDTO.getNewPassword()) && user.getPassword().equals(userDTO.getPassword())) {
+            user.setPassword(userDTO.getNewPassword());
             userService.save(user);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         else {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }

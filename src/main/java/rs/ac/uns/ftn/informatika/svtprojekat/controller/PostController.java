@@ -15,7 +15,6 @@ import rs.ac.uns.ftn.informatika.svtprojekat.service.FlairService;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.PostService;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +48,16 @@ public class PostController {
         return new ResponseEntity<>(postsDTO, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<PostDTO> getPost(@PathVariable("id") Integer id) {
+        Post post = postService.findOne(id);
+        if (post == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new PostDTO(post), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<PostDTO> postCommunity(@RequestBody PostDTO postDTO){
         Post post = new Post();
@@ -63,6 +72,12 @@ public class PostController {
         post.setText(postDTO.getText());
         post.setTitle(postDTO.getTitle());
 
+        if(post.getImagePath() == null || post.getText() == null ||
+            post.getTitle() == null || post.getFlair() == null ||
+            post.getCommunity() == null || post.getUser() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         postService.save(post);
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.CREATED);
     }
@@ -72,6 +87,10 @@ public class PostController {
         if (postDTO.getId() != null) {
             Post post = postService.findOne(postDTO.getId());
 
+            if(post == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
             post.setFlair(flairService.findOne(postDTO.getFlair().getId()));
             post.setCommunity(communityService.findOne(postDTO.getCommunity().getId()));
             post.setUser(userService.findOne(postDTO.getUser().getId()));
@@ -80,10 +99,16 @@ public class PostController {
             post.setText(postDTO.getText());
             post.setTitle(postDTO.getTitle());
 
+            if(post.getImagePath() == null || post.getText() == null ||
+                    post.getTitle() == null || post.getFlair() == null ||
+                    post.getCommunity() == null || post.getUser() == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
             postService.save(post);
             return new ResponseEntity<>(new PostDTO(post), HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping
@@ -91,9 +116,13 @@ public class PostController {
         if (postDTO.getId() != null) {
             Post post = postService.findOne(postDTO.getId());
 
+            if(post == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
             postService.remove(post.getId());
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 }
