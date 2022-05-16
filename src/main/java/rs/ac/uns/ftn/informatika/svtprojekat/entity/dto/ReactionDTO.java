@@ -18,11 +18,11 @@ public class ReactionDTO implements Serializable {
 
     private LocalDate timestamp;
 
-    private User user;
+    private UserDTO user;
 
-    private Comment comment;
+    private CommentDTO comment;
 
-    private Post post;
+    private PostDTO post;
 
     public ReactionDTO() {
     }

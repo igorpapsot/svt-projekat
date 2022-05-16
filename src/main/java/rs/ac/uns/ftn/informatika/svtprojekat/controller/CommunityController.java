@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.CommunityDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.CommunityService;
-import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,10 +40,8 @@ public class CommunityController {
         community.setName(communityDTO.getName());
         community.setCreationDate(date.toString());
         community.setSuspended(false);
-        community.setRules(communityDTO.getRules());
-        community.setPosts(communityDTO.getPosts());
-        community.setModerators(communityDTO.getModerators());
-        community.setFlairs(communityDTO.getFlairs());
+//        community.setSuspended(communityDTO.isSuspended());
+//        community.setSuspendedReason(communityDTO.getSuspendedReason());
 
         communityService.save(community);
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.CREATED);
@@ -57,11 +54,9 @@ public class CommunityController {
 
             community.setDescription(communityDTO.getDescription());
             community.setName(communityDTO.getName());
-//            community.setFlairs(communityDTO.getFlairs());
-//            community.setPosts(communityDTO.getPosts());
-//            community.setModerators(communityDTO.getModerators());
-//            community.setSuspended(communityDTO.isSuspended());
-//            community.setRules(communityDTO.getRules());
+            community.setSuspended(communityDTO.isSuspended());
+            community.setSuspendedReason(communityDTO.getSuspendedReason());
+//            community.setCreationDate(communityDTO.getCreationDate());
 
             communityService.save(community);
             return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);

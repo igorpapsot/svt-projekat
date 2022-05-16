@@ -9,6 +9,8 @@ public class ModeratorDTO implements Serializable {
 
     private Integer id;
 
+    private CommunityDTO communityDTO;
+
     public ModeratorDTO() {
     }
 }

@@ -18,13 +18,13 @@ public class ReportDTO implements Serializable {
 
     private LocalDate timestamp;
 
-    private User byUser;
-
     private boolean accepted;
 
-    private Comment comment;
+    private UserDTO byUser;
 
-    private Post post;
+    private CommentDTO comment;
+
+    private PostDTO post;
 
     public ReportDTO() {
     }

@@ -30,8 +30,8 @@ public class Comment implements Serializable {
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
 
     @ManyToOne

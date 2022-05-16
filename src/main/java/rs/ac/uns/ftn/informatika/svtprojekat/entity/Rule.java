@@ -19,6 +19,10 @@ public class Rule {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "community_id", nullable = false)
+    private Community community;
+
     public Rule(){
 
     }

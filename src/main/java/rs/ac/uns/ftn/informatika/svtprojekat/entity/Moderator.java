@@ -18,6 +18,14 @@ public class Moderator implements Serializable {
     @Column(name = "moderator_id", unique = true, nullable = false)
     private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "community_id", nullable = false)
+    private Community community;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Moderator() {
     }
 

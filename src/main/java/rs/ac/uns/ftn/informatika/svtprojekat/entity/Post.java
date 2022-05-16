@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,10 +11,9 @@ import java.util.Objects;
 import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
-
+@Data
 @Entity
 @Table(name = "post")
-@Data
 public class Post implements Serializable {
 
     @Id
@@ -41,7 +41,13 @@ public class Post implements Serializable {
     @JoinColumn(name = "flair_id", referencedColumnName = "flair_id", nullable = false)
     private Flair flair;
 
+    @ManyToOne
+    @JoinColumn(name = "community_id", nullable = false)
+    private Community community;
+
     public Post() {
     }
+
+
 
 }

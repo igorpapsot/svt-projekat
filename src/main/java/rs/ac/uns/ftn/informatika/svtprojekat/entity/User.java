@@ -5,7 +5,11 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 
@@ -40,6 +44,9 @@ public class User implements Serializable {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private RoleENUM role;
+
+    @OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "user")
+    private Set<Moderator> moderators = new HashSet<Moderator>();
 
     public User() {
     }

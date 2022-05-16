@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.entity.dto;
 
 import lombok.Data;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Flair;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
@@ -21,14 +22,16 @@ public class PostDTO implements Serializable {
 
     private String imagePath;
 
-    private User user;
+    private UserDTO user;
 
-    private Flair flair;
+    private FlairDTO flair;
+
+    private CommunityDTO community;
 
     public PostDTO() {
     }
 
-    public PostDTO(Integer id, String title, String text, LocalDate creationDate, String imagePath, User user, Flair flair) {
+    public PostDTO(Integer id, String title, String text, LocalDate creationDate, String imagePath, UserDTO user, FlairDTO flair, CommunityDTO community) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -36,10 +39,11 @@ public class PostDTO implements Serializable {
         this.imagePath = imagePath;
         this.user = user;
         this.flair = flair;
+        this.community = community;
     }
 
     public PostDTO(Post post) {
-        this(post.getId(), post.getTitle(), post.getText(), post.getCreationDate(), post.getImagePath(), post.getUser(), post.getFlair());
-                //(category.getParent() != null && category.getParent().getId() != null) ? new CategoryDTO(category.getParent()) : new CategoryDTO());
+        this(post.getId(), post.getTitle(), post.getText(), post.getCreationDate(), post.getImagePath(), new UserDTO(post.getUser()), new FlairDTO(post.getFlair()), new CommunityDTO(post.getCommunity()) );
+
     }
 }

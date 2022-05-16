@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,9 +15,9 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
+@Data
 @Entity
 @Table(name = "community")
-@Data
 public class Community implements Serializable {
 
     @Id
@@ -38,19 +40,62 @@ public class Community implements Serializable {
     @Column(name = "suspended_reason")
     private String suspendedReason;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @OneToMany(cascade=CascadeType.ALL)
+//    @JoinColumn(name="community_id", nullable = false)
+//    private Set<Flair> flairs = new HashSet<Flair>();
+
+    @ManyToMany(mappedBy="communities")
+    private List<Flair> flairs;
+
+    @OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "community")
+    private Set<Moderator> moderators = new HashSet<Moderator>();
+
+    @OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "community")
     private Set<Post> posts = new HashSet<Post>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "community")
     private Set<Rule> rules = new HashSet<>();
-
-    @ManyToMany(mappedBy = "communities", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Flair> flairs = new HashSet<Flair>();
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Moderator> moderators = new HashSet<Moderator>();
 
     public Community() {
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Community)) return false;
+        Community community = (Community) o;
+        return isSuspended() == community.isSuspended() && Objects.equals(getId(), community.getId()) && Objects.equals(getName(), community.getName()) && Objects.equals(getDescription(), community.getDescription()) && Objects.equals(getCreationDate(), community.getCreationDate()) && Objects.equals(getSuspendedReason(), community.getSuspendedReason()) && Objects.equals(getFlairs(), community.getFlairs()) && Objects.equals(getModerators(), community.getModerators()) && Objects.equals(getRules(), community.getRules());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getDescription(), getCreationDate(), isSuspended(), getSuspendedReason(), getFlairs(), getModerators(), getRules());
+    }
+
+    @Override
+    public String toString() {
+        return "Community{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", creationDate='" + creationDate + '\'' +
+                ", isSuspended=" + isSuspended +
+                ", suspendedReason='" + suspendedReason + '\'' +
+                '}';
+    }
+
+    //    public void add(Post post) {
+//        if (post.getCommunity() != null)
+//            post.getCommunity().getPosts().remove(post);
+//        post.setCommunity(this);
+//        getPosts().add(post);
+//    }
+//
+//    public void add(Rule rule) {
+//        if (rule.getCommunity() != null)
+//            rule.getCommunity().getRules().remove(rule);
+//        rule.setCommunity(this);
+//        getRules().add(rule);
+//    }
 
 }

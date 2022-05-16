@@ -21,11 +21,9 @@ public class CommentDTO implements Serializable {
 
     private boolean isDeleted;
 
-    private User user;
+    private UserDTO user;
 
-    private Post post;
-
-    private Set<Comment> comments = new HashSet<Comment>();
+    private PostDTO post;
 
     public CommentDTO() {
     }

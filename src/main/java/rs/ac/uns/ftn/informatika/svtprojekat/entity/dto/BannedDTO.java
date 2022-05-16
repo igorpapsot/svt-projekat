@@ -15,11 +15,11 @@ public class BannedDTO implements Serializable {
 
     private LocalDate timestamp;
 
-    private User user;
+    private UserDTO user;
 
-    private Moderator moderator;
+    private ModeratorDTO moderator;
 
-    private Community community;
+    private CommunityDTO community;
 
     public BannedDTO() {
     }

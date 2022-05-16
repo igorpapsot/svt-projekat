@@ -5,13 +5,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.Flair;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.CommunityDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTO;
+import rs.ac.uns.ftn.informatika.svtprojekat.service.CommunityService;
+import rs.ac.uns.ftn.informatika.svtprojekat.service.FlairService;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.PostService;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,15 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private FlairService flairService;
+
+    @Autowired
+    private CommunityService communityService;
 
     @GetMapping
     public ResponseEntity<List<PostDTO>> getPosts() {
@@ -41,12 +54,14 @@ public class PostController {
         Post post = new Post();
         LocalDate date = LocalDate.now();
 
+        post.setFlair(flairService.findOne(postDTO.getFlair().getId()));
+        post.setCommunity(communityService.findOne(postDTO.getCommunity().getId()));
+        post.setUser(userService.findOne(postDTO.getUser().getId()));
+
         post.setCreationDate(date);
-        post.setFlair(postDTO.getFlair());
         post.setImagePath(postDTO.getImagePath());
         post.setText(postDTO.getText());
         post.setTitle(postDTO.getTitle());
-        post.setUser(postDTO.getUser());
 
         postService.save(post);
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.CREATED);
@@ -57,11 +72,13 @@ public class PostController {
         if (postDTO.getId() != null) {
             Post post = postService.findOne(postDTO.getId());
 
-            post.setFlair(postDTO.getFlair());
+            post.setFlair(flairService.findOne(postDTO.getFlair().getId()));
+            post.setCommunity(communityService.findOne(postDTO.getCommunity().getId()));
+            post.setUser(userService.findOne(postDTO.getUser().getId()));
+
             post.setImagePath(postDTO.getImagePath());
             post.setText(postDTO.getText());
             post.setTitle(postDTO.getTitle());
-            post.setUser(postDTO.getUser());
 
             postService.save(post);
             return new ResponseEntity<>(new PostDTO(post), HttpStatus.OK);
