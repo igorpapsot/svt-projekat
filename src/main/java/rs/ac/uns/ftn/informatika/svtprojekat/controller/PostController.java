@@ -71,6 +71,7 @@ public class PostController {
         post.setImagePath(postDTO.getImagePath());
         post.setText(postDTO.getText());
         post.setTitle(postDTO.getTitle());
+        //post.setCreationDate(postDTO.getCreationDate());
 
         if(post.getImagePath() == null || post.getText() == null ||
             post.getTitle() == null || post.getFlair() == null ||

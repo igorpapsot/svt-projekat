@@ -32,11 +32,12 @@ public class UserDTO implements Serializable {
     public UserDTO(Integer id, String username, String password, String email, String avatar, LocalDate registrationDate, boolean isBanned) {
         this.id = id;
         this.username = username;
-        this.password = newPassword;
+        this.password = password;
         this.email = email;
         this.avatar = avatar;
         this.registrationDate = registrationDate;
         this.isBanned = isBanned;
+        this.newPassword = newPassword;
     }
 
     public UserDTO(User user) {
