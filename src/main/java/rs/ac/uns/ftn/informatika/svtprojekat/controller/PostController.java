@@ -3,12 +3,9 @@ package rs.ac.uns.ftn.informatika.svtprojekat.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Flair;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.CommunityDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.CommunityService;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.FlairService;
@@ -35,6 +32,7 @@ public class PostController {
     @Autowired
     private CommunityService communityService;
 
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<PostDTO>> getPosts() {
         List<Post> posts = postService.findAll();
@@ -48,6 +46,7 @@ public class PostController {
         return new ResponseEntity<>(postsDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<PostDTO> getPost(@PathVariable("id") Integer id) {
         Post post = postService.findOne(id);
@@ -58,8 +57,9 @@ public class PostController {
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<PostDTO> postCommunity(@RequestBody PostDTO postDTO){
+    public ResponseEntity<PostDTO> postPost(@RequestBody PostDTO postDTO){
         Post post = new Post();
         LocalDate date = LocalDate.now();
 
@@ -71,7 +71,6 @@ public class PostController {
         post.setImagePath(postDTO.getImagePath());
         post.setText(postDTO.getText());
         post.setTitle(postDTO.getTitle());
-        //post.setCreationDate(postDTO.getCreationDate());
 
         if(post.getImagePath() == null || post.getText() == null ||
             post.getTitle() == null || post.getFlair() == null ||
@@ -83,10 +82,11 @@ public class PostController {
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<PostDTO> putCommunity(@RequestBody PostDTO postDTO){
-        if (postDTO.getId() != null) {
-            Post post = postService.findOne(postDTO.getId());
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<PostDTO> putPost(@RequestBody PostDTO postDTO, @PathVariable("id") Integer id){
+        if (id != null) {
+            Post post = postService.findOne(id);
 
             if(post == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -112,10 +112,11 @@ public class PostController {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteCommunity(@RequestBody PostDTO postDTO) {
-        if (postDTO.getId() != null) {
-            Post post = postService.findOne(postDTO.getId());
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity deletePost(@PathVariable("id") Integer id) {
+        if (id != null) {
+            Post post = postService.findOne(id);
 
             if(post == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

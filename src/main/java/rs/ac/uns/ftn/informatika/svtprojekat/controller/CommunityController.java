@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.informatika.svtprojekat.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.CommunityDTO;
@@ -19,6 +20,7 @@ public class CommunityController {
     @Autowired
     private CommunityService communityService;
 
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<CommunityDTO>> getCommunities() {
         List<Community> communities = communityService.findAll();
@@ -31,6 +33,7 @@ public class CommunityController {
         return new ResponseEntity<>(communitiesDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<CommunityDTO> getCommunity(@PathVariable("id") Integer id) {
         Community community = communityService.findOne(id);
@@ -41,6 +44,7 @@ public class CommunityController {
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<CommunityDTO> postCommunity(@RequestBody CommunityDTO communityDTO){
         Community community = new Community();
@@ -59,10 +63,11 @@ public class CommunityController {
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<CommunityDTO> putCommunity(@RequestBody CommunityDTO communityDTO){
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<CommunityDTO> putCommunity(@RequestBody CommunityDTO communityDTO, @PathVariable("id") Integer id){
         if (communityDTO.getId() != null) {
-            Community community = communityService.findOne(communityDTO.getId());
+            Community community = communityService.findOne(id);
 
             if(community == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -83,10 +88,11 @@ public class CommunityController {
         return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteCommunity(@RequestBody CommunityDTO communityDTO) {
-        if (communityDTO.getId() != null) {
-            Community community = communityService.findOne(communityDTO.getId());
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity deleteCommunity(@PathVariable("id") Integer id) {
+        if (id != null) {
+            Community community = communityService.findOne(id);
 
             if(community == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
