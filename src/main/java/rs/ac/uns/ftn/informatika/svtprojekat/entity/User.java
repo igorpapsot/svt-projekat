@@ -13,7 +13,6 @@ import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.IDENTITY;
 
 
 @Table(name = "user")
@@ -32,7 +31,7 @@ public class User implements Serializable {
     private String username;
 
     @Column(name = "password", nullable = false)
-    @Size(min = 6, max = 25, message = "Password must be between 6 and 25 characters")
+    @Size(min = 6, max = 60, message = "Password must be between 6 and 25 characters")
     private String password;
 
     @Column(name = "email", nullable = false)

@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.service;
 
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.UserDTO;
 
 import java.util.List;
 
@@ -17,5 +18,7 @@ public interface UserService {
     void remove(Integer id);
 
     User findUserByUsername(String username);
+
+    User createUser(UserDTO userDTO);
 
 }

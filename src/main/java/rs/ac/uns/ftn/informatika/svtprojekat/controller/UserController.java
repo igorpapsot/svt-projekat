@@ -3,11 +3,17 @@ package rs.ac.uns.ftn.informatika.svtprojekat.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.UserDTO;
+import rs.ac.uns.ftn.informatika.svtprojekat.security.TokenUtils;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
 
 import java.time.LocalDate;
@@ -20,6 +26,15 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TokenUtils tokenUtils;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers() {
@@ -54,7 +69,6 @@ public class UserController {
         user.setPassword(userDTO.getPassword());
         LocalDate date = LocalDate.now();
         user.setRegistrationDate(date);
-        //user.setRegistrationDate(userDTO.getRegistrationDate());
 
         User usernameUser = userService.findUserByUsername(user.getUsername());
 
@@ -66,7 +80,7 @@ public class UserController {
 
         if(usernameUser == null ) {
             System.out.println(user);
-            user = userService.save(user);
+            user = userService.createUser(new UserDTO(user));
             return new ResponseEntity<>(new UserDTO(user), HttpStatus.CREATED);
         }
         else {
@@ -75,21 +89,21 @@ public class UserController {
 
     }
 
-    @PostMapping(value = "/login", consumes = "application/json")
-    public ResponseEntity login(@RequestBody UserDTO userDTO) {
-        User user = new User();
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
-
-        User userDb = userService.findUserByUsername(user.getUsername());
-
-        if(userDb != null && user.getPassword().equals(userDb.getPassword())) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-    }
+//    @PostMapping(value = "/login", consumes = "application/json")
+//    public ResponseEntity login(@RequestBody UserDTO userDTO) {
+//        User user = new User();
+//        user.setUsername(userDTO.getUsername());
+//        user.setPassword(userDTO.getPassword());
+//
+//        User userDb = userService.findUserByUsername(user.getUsername());
+//
+//        if(userDb != null && user.getPassword().equals(userDb.getPassword())) {
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        }
+//        else {
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        }
+//    }
 
     @PutMapping(consumes = "application/json")
     public ResponseEntity changePassword(@RequestBody UserDTO userDTO) {
@@ -106,5 +120,20 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginSecurity(@RequestBody UserDTO userDto) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword());
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userDto.getUsername());
+                System.out.println(tokenUtils.generateToken(userDetails));
+            return ResponseEntity.ok(tokenUtils.generateToken(userDetails));
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -1,18 +1,26 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.RoleENUM;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.UserDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.repository.UserRepository;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository repository;
+    private UserRepository repository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @Override
     public List<User> findAllByParent(User parent) {
@@ -39,6 +47,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByUsername(String username) {
-        return repository.findByUsername(username);
+        Optional<User> user = repository.findFirstByUsername(username);
+        if (!user.isEmpty()) {
+            return user.get();
+        }
+        return null;
+    }
+
+    @Override
+    public User createUser(UserDTO userDTO) {
+
+        Optional<User> user = repository.findFirstByUsername(userDTO.getUsername());
+
+        if(user.isPresent()){
+            return null;
+        }
+
+        User newUser = new User();
+        newUser.setUsername(userDTO.getUsername());
+        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        newUser.setRole(RoleENUM.USER);
+        newUser = repository.save(newUser);
+
+        return newUser;
     }
 }

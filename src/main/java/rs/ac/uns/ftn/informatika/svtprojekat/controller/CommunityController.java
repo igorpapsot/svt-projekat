@@ -50,8 +50,6 @@ public class CommunityController {
         community.setName(communityDTO.getName());
         community.setCreationDate(date.toString());
         community.setSuspended(false);
-//        community.setSuspended(communityDTO.isSuspended());
-//        community.setSuspendedReason(communityDTO.getSuspendedReason());
 
         if(community.getDescription() == null || community.getName() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -74,7 +72,6 @@ public class CommunityController {
             community.setName(communityDTO.getName());
             community.setSuspended(communityDTO.isSuspended());
             community.setSuspendedReason(communityDTO.getSuspendedReason());
-//            community.setCreationDate(communityDTO.getCreationDate());
 
             if(community.getDescription() == null || community.getName() == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
