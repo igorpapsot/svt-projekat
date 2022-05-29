@@ -32,7 +32,7 @@ public class PostController {
     @Autowired
     private CommunityService communityService;
 
-    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<PostDTO>> getPosts() {
         List<Post> posts = postService.findAll();

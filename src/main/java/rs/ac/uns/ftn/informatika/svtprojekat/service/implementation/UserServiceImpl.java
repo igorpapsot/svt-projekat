@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.RoleENUM;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.UserDTO;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.RegisterDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.repository.UserRepository;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
 
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(UserDTO userDTO) {
+    public User createUser(RegisterDTO userDTO) {
 
         Optional<User> user = repository.findFirstByUsername(userDTO.getUsername());
 
@@ -67,6 +67,10 @@ public class UserServiceImpl implements UserService {
         newUser.setUsername(userDTO.getUsername());
         newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         newUser.setRole(RoleENUM.USER);
+        newUser.setAvatar(userDTO.getAvatar());
+        newUser.setRegistrationDate(userDTO.getRegistrationDate());
+        newUser.setBanned(userDTO.isBanned());
+        newUser.setEmail(userDTO.getEmail());
         newUser = repository.save(newUser);
 
         return newUser;

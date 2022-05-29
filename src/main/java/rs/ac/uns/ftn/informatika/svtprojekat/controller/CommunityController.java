@@ -20,7 +20,7 @@ public class CommunityController {
     @Autowired
     private CommunityService communityService;
 
-    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<CommunityDTO>> getCommunities() {
         List<Community> communities = communityService.findAll();
