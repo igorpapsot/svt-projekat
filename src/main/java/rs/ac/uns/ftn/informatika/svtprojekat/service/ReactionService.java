@@ -19,4 +19,6 @@ public interface ReactionService {
 
     boolean checkIfReactionExists(Integer userId, Post post);
 
+    void undoReaction(Integer userId, Post post);
+
 }

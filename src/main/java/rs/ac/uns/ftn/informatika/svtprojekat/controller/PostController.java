@@ -150,7 +150,8 @@ public class PostController {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
             else {
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                reactionService.undoReaction(userId, post);
+                return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
             }
         }
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -175,7 +176,8 @@ public class PostController {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
             else {
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                reactionService.undoReaction(userId, post);
+                return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
             }
 
         }

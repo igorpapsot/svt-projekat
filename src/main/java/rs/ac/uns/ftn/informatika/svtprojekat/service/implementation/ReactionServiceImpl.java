@@ -48,11 +48,17 @@ public class ReactionServiceImpl implements ReactionService {
     @Override
     public boolean checkIfReactionExists(Integer userId, Post post) {
         User user = userService.findOne(userId);
-        if(repository.findByUserAndPost(user, post) == null)
+        if(repository.findByUserAndPost(user, post) == null) {
             return  false;
-        else
-            return  true;
+        }
+        else  return  true;
 
+    }
 
+    @Override
+    public void undoReaction(Integer userId, Post post) {
+        User user = userService.findOne(userId);
+        Reaction reaction = repository.findByUserAndPost(user, post);
+        repository.deleteById(reaction.getId());
     }
 }
