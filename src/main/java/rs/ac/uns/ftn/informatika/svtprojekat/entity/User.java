@@ -31,7 +31,7 @@ public class User implements Serializable {
     private String username;
 
     @Column(name = "password", nullable = false)
-    @Size(min = 6, max = 60, message = "Password must be between 6 and 25 characters")
+    @Size(min = 5, max = 60, message = "Password must be between 6 and 25 characters")
     private String password;
 
     @Column(name = "email", nullable = false)

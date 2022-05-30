@@ -11,8 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.ChangePasswordDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.LoginDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.RegisterDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.UserDTO;
@@ -38,6 +40,9 @@ public class UserController {
 
     @Autowired
     private TokenUtils tokenUtils;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
@@ -94,21 +99,20 @@ public class UserController {
 
     }
 
-    //popravi changePassword
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @PutMapping(consumes = "application/json", value = "/{id}")
-    public ResponseEntity changePassword(@RequestBody RegisterDTO userDTO, @PathVariable("id") Integer id) {
-        User user = userService.findOne(id);
-        if (user == null) {
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @PutMapping(consumes = "application/json", value = "/changePassword")
+    public ResponseEntity changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+        rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+        Integer userId = user.getId();
+        if (userId == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        if (!user.getPassword().equals(userDTO.getNewPassword()) && user.getPassword().equals(userDTO.getPassword())) {
-            user.setPassword(userDTO.getNewPassword());
-            userService.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
         else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            user.setPassword(passwordEncoder.encode(changePasswordDTO.getPassword()));
+            userService.save(user);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
 
     }
