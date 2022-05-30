@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTO;
-import rs.ac.uns.ftn.informatika.svtprojekat.service.CommunityService;
-import rs.ac.uns.ftn.informatika.svtprojekat.service.FlairService;
-import rs.ac.uns.ftn.informatika.svtprojekat.service.PostService;
-import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
+import rs.ac.uns.ftn.informatika.svtprojekat.service.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -31,6 +31,9 @@ public class PostController {
 
     @Autowired
     private CommunityService communityService;
+
+    @Autowired
+    private ReactionService reactionService;
 
     //@PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @GetMapping
@@ -124,6 +127,57 @@ public class PostController {
 
             postService.remove(post.getId());
             return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @PostMapping(value = "/{id}/upVotes")
+    public ResponseEntity upVote(@PathVariable("id") Integer id) {
+        if (id != null) {
+            Post post = postService.findOne(id);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            User u = (User) auth.getPrincipal();
+            rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+            Integer userId = user.getId();
+
+            if(post == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            if(!reactionService.checkIfReactionExists(userId, post)){
+                postService.upVote(userId, post);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+        }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @PostMapping(value = "/{id}/downVotes")
+    public ResponseEntity downVote(@PathVariable("id") Integer id) {
+        if (id != null) {
+            Post post = postService.findOne(id);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            User u = (User) auth.getPrincipal();
+            rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+            Integer userId = user.getId();
+
+            if(post == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            if(!reactionService.checkIfReactionExists(userId, post)){
+                postService.downVote(userId, post);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+
         }
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }

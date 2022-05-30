@@ -16,4 +16,7 @@ public interface PostService {
 
     void remove(Integer id);
 
+    void upVote(Integer userId, Post post);
+
+    void downVote(Integer userId, Post post);
 }

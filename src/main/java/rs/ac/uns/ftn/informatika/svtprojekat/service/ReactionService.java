@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.service;
 
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Reaction;
 
 import java.util.List;
@@ -15,5 +16,7 @@ public interface ReactionService {
     Reaction save(Reaction reaction);
 
     void remove(Integer id);
+
+    boolean checkIfReactionExists(Integer userId, Post post);
 
 }

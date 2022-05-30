@@ -26,15 +26,15 @@ public class Reaction implements Serializable {
     private LocalDate timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "comment_id", referencedColumnName = "comment_id", nullable = false)
+    @JoinColumn(name = "comment_id", referencedColumnName = "comment_id")
     private Comment comment;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", referencedColumnName = "post_id", nullable = false)
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id")
     private Post post;
 
     public Reaction() {
