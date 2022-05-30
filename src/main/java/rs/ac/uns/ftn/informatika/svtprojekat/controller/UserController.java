@@ -14,10 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.ChangePasswordDTO;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.LoginDTO;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.RegisterDTO;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.UserDTO;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.security.TokenUtils;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
 
@@ -130,5 +127,32 @@ public class UserController {
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @PutMapping(consumes = "application/json")
+    public ResponseEntity changeUser(@RequestBody ChangeUserDTO changeUserDTO) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+        rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+        Integer userId = user.getId();
+        if (userId == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            if(changeUserDTO.getEmail() != null) {
+                user.setEmail(changeUserDTO.getEmail());
+            }
+            if(changeUserDTO.getUsername() != null) {
+                user.setUsername(changeUserDTO.getUsername());
+            }
+            if(changeUserDTO.getAvatar() != null) {
+                user.setAvatar(changeUserDTO.getAvatar());
+            }
+            user.setBanned(changeUserDTO.isBanned());
+            userService.save(user);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+
     }
 }
