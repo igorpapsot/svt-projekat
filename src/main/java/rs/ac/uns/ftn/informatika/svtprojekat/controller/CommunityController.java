@@ -88,7 +88,8 @@ public class CommunityController {
         return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity deleteCommunity(@PathVariable("id") Integer id) {
         if (id != null) {

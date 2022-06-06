@@ -60,7 +60,7 @@ public class PostController {
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<PostDTO> postPost(@RequestBody PostDTO postDTO){
         Post post = new Post();
@@ -85,7 +85,8 @@ public class PostController {
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @CrossOrigin(origins = "http://localhost:4200")
     @PutMapping(value = "/{id}")
     public ResponseEntity<PostDTO> putPost(@RequestBody PostDTO postDTO, @PathVariable("id") Integer id){
         if (id != null) {
@@ -115,7 +116,8 @@ public class PostController {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity deletePost(@PathVariable("id") Integer id) {
         if (id != null) {
