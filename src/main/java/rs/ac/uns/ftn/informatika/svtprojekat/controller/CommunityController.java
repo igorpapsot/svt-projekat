@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.CommunityDTO;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.SuspendCommunityDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.CommunityService;
 
 import java.time.LocalDate;
@@ -103,5 +104,20 @@ public class CommunityController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PutMapping(value = "/{id}/suspend")
+    public ResponseEntity<CommunityDTO> suspend(@PathVariable("id") Integer id, @RequestBody SuspendCommunityDTO suspendCommunityDTO){
+        Community community = communityService.findOne(id);
+        community.setSuspended(true);
+        community.setSuspendedReason(suspendCommunityDTO.getSuspendedReason());
+
+        if(community == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        communityService.save(community);
+        return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
     }
 }

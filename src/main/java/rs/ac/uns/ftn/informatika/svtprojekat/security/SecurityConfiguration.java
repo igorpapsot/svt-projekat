@@ -78,6 +78,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/communities/{id}").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/posts/{id}").permitAll()
                 .antMatchers(HttpMethod.PUT, "/posts").permitAll()
+                .antMatchers(HttpMethod.PUT, "/communities/{id}/suspend").permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
