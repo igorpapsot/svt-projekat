@@ -43,7 +43,9 @@ public class PostController {
         List<PostDTO> postsDTO = new ArrayList<>();
         for (Post p : posts) {
             System.out.println(p.toString());
-            postsDTO.add(new PostDTO(p));
+            PostDTO post = new PostDTO(p);
+            post.setKarma(reactionService.getKarma(p));
+            postsDTO.add(post);
         }
 
         return new ResponseEntity<>(postsDTO, HttpStatus.OK);

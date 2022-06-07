@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Reaction;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.ReactionTypeENUM;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
 import rs.ac.uns.ftn.informatika.svtprojekat.repository.ReactionRepository;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.ReactionService;
@@ -60,5 +61,21 @@ public class ReactionServiceImpl implements ReactionService {
         User user = userService.findOne(userId);
         Reaction reaction = repository.findByUserAndPost(user, post);
         repository.deleteById(reaction.getId());
+    }
+
+    @Override
+    public int getKarma(Post post) {
+        List<Reaction> reactions = repository.findAllByPost(post);
+        int karma = 0;
+
+        for(Reaction r : reactions) {
+            if(r.getType().equals(ReactionTypeENUM.UPVOTE)){
+                karma = karma + 1;
+            }
+            else {
+                karma = karma - 1;
+            }
+        }
+        return karma;
     }
 }

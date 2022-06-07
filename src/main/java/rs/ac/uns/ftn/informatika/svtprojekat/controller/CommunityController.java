@@ -45,7 +45,8 @@ public class CommunityController {
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping
     public ResponseEntity<CommunityDTO> postCommunity(@RequestBody CommunityDTO communityDTO){
         Community community = new Community();

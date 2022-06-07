@@ -21,4 +21,6 @@ public interface ReactionService {
 
     void undoReaction(Integer userId, Post post);
 
+    int getKarma(Post post);
+
 }

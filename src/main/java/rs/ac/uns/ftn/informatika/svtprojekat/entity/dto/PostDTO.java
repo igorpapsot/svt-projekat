@@ -1,10 +1,7 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.entity.dto;
 
 import lombok.Data;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Flair;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -27,6 +24,8 @@ public class PostDTO implements Serializable {
     private FlairDTO flair;
 
     private CommunityDTO community;
+
+    private int karma;
 
     public PostDTO() {
     }
