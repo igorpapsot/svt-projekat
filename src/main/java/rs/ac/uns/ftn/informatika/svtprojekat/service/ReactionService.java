@@ -23,4 +23,6 @@ public interface ReactionService {
 
     int getKarma(Post post);
 
+    void deleteAllbyPost(Post post);
+
 }

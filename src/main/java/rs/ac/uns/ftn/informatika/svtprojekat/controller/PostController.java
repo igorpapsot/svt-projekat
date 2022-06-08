@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTO;
@@ -35,7 +36,7 @@ public class PostController {
     @Autowired
     private ReactionService reactionService;
 
-    //@PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+
     @GetMapping
     public ResponseEntity<List<PostDTO>> getPosts() {
         List<Post> posts = postService.findAll();
@@ -62,7 +63,7 @@ public class PostController {
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.OK);
     }
 
-    //@PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<PostDTO> postPost(@RequestBody PostDTO postDTO){
         Post post = new Post();
@@ -87,7 +88,7 @@ public class PostController {
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.CREATED);
     }
 
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @CrossOrigin(origins = "http://localhost:4200")
     @PutMapping(value = "/{id}")
     public ResponseEntity<PostDTO> putPost(@RequestBody PostDTO postDTO, @PathVariable("id") Integer id){
@@ -96,6 +97,16 @@ public class PostController {
 
             if(post == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            User u = (User) auth.getPrincipal();
+            rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+
+            System.out.println("user id: " + user.getId());
+            System.out.println("user id from post: " + post.getUser().getId());
+            if(!user.getId().equals(post.getUser().getId())) {
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
             }
 
             post.setFlair(flairService.findOne(postDTO.getFlair().getId()));
@@ -118,7 +129,8 @@ public class PostController {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity deletePost(@PathVariable("id") Integer id) {
@@ -129,6 +141,17 @@ public class PostController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            User u = (User) auth.getPrincipal();
+            rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+
+            System.out.println("user id: " + user.getId());
+            System.out.println("user id from post: " + post.getUser().getId());
+            if(!user.getId().equals(post.getUser().getId())) {
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
+
+            reactionService.deleteAllbyPost(post);
             postService.remove(post.getId());
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -136,6 +159,7 @@ public class PostController {
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(value = "/{id}/upVotes")
     public ResponseEntity upVote(@PathVariable("id") Integer id) {
         if (id != null) {
@@ -162,6 +186,7 @@ public class PostController {
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(value = "/{id}/downVotes")
     public ResponseEntity downVote(@PathVariable("id") Integer id) {
         if (id != null) {

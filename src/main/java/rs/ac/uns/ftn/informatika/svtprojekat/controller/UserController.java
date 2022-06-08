@@ -115,7 +115,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginSecurity(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<jwtDTO> loginSecurity(@RequestBody LoginDTO loginDTO) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
@@ -123,7 +123,9 @@ public class UserController {
         try {
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.getUsername());
                 System.out.println(tokenUtils.generateToken(userDetails));
-            return ResponseEntity.ok(tokenUtils.generateToken(userDetails));
+                jwtDTO jwtDTO = new jwtDTO();
+                jwtDTO.setJwt(tokenUtils.generateToken(userDetails));
+            return new ResponseEntity<>(jwtDTO, HttpStatus.OK);
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.notFound().build();
         }

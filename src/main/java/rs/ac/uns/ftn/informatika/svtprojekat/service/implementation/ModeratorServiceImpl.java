@@ -31,7 +31,8 @@ public class ModeratorServiceImpl implements ModeratorService {
 
     @Override
     public Moderator save(Moderator moderator) {
-        return null;
+        repository.save(moderator);
+        return moderator;
     }
 
     @Override

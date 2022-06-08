@@ -78,4 +78,9 @@ public class ReactionServiceImpl implements ReactionService {
         }
         return karma;
     }
+
+    @Override
+    public void deleteAllbyPost(Post post) {
+        repository.deleteAllByPost(post);
+    }
 }

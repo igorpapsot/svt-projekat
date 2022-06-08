@@ -4,11 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.Moderator;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.CommunityDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.SuspendCommunityDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.CommunityService;
+import rs.ac.uns.ftn.informatika.svtprojekat.service.ModeratorService;
+import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,7 +27,12 @@ public class CommunityController {
     @Autowired
     private CommunityService communityService;
 
-    //@PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ModeratorService moderatorService;
+
     @GetMapping
     public ResponseEntity<List<CommunityDTO>> getCommunities() {
         List<Community> communities = communityService.findAll();
@@ -45,11 +56,13 @@ public class CommunityController {
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
     }
 
-    //@PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping
     public ResponseEntity<CommunityDTO> postCommunity(@RequestBody CommunityDTO communityDTO){
         Community community = new Community();
+        Moderator moderator = new Moderator();
+
         LocalDate date = LocalDate.now();
 
         community.setDescription(communityDTO.getDescription());
@@ -57,11 +70,18 @@ public class CommunityController {
         community.setCreationDate(date.toString());
         community.setSuspended(false);
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User u = (User) auth.getPrincipal();
+        rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+
+        moderator.setCommunity(community);
+        moderator.setUser(user);
         if(community.getDescription() == null || community.getName() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         communityService.save(community);
+        moderatorService.save(moderator);
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.CREATED);
     }
 
@@ -90,7 +110,7 @@ public class CommunityController {
         return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
     }
 
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity deleteCommunity(@PathVariable("id") Integer id) {
@@ -107,6 +127,7 @@ public class CommunityController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @CrossOrigin(origins = "http://localhost:4200")
     @PutMapping(value = "/{id}/suspend")
     public ResponseEntity<CommunityDTO> suspend(@PathVariable("id") Integer id, @RequestBody SuspendCommunityDTO suspendCommunityDTO){
