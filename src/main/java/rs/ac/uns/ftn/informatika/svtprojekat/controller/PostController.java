@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.Reaction;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.ReactionTypeENUM;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.*;
 
@@ -63,6 +65,7 @@ public class PostController {
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.OK);
     }
 
+    @Transactional
     @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<PostDTO> postPost(@RequestBody PostDTO postDTO){
@@ -78,12 +81,23 @@ public class PostController {
         post.setText(postDTO.getText());
         post.setTitle(postDTO.getTitle());
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User u = (User) auth.getPrincipal();
+        rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+
         if(post.getImagePath() == null || post.getText() == null ||
             post.getTitle() == null || post.getFlair() == null ||
             post.getCommunity() == null || post.getUser() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        Reaction reaction = new Reaction();
+        LocalDate ts = LocalDate.now();
+        reaction.setPost(post);
+        reaction.setType(ReactionTypeENUM.UPVOTE);
+        reaction.setUser(user);
+        reaction.setTimestamp(ts);
+        reactionService.save(reaction);
         postService.save(post);
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.CREATED);
     }

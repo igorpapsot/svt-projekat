@@ -38,7 +38,8 @@ public class ReactionServiceImpl implements ReactionService {
 
     @Override
     public Reaction save(Reaction reaction) {
-        return null;
+        repository.save(reaction);
+        return reaction;
     }
 
     @Override
