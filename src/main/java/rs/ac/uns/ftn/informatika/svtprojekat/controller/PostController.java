@@ -175,7 +175,7 @@ public class PostController {
     @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(value = "/{id}/upVotes")
-    public ResponseEntity upVote(@PathVariable("id") Integer id) {
+    public HttpStatus upVote(@PathVariable("id") Integer id) {
         if (id != null) {
             Post post = postService.findOne(id);
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -184,25 +184,25 @@ public class PostController {
             Integer userId = user.getId();
 
             if(post == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return HttpStatus.NOT_FOUND;
             }
 
             if(!reactionService.checkIfReactionExists(userId, post)){
                 postService.upVote(userId, post);
-                return new ResponseEntity<>(HttpStatus.OK);
+                return HttpStatus.OK;
             }
             else {
                 reactionService.undoReaction(userId, post);
-                return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+                return HttpStatus.ACCEPTED;
             }
         }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return HttpStatus.BAD_REQUEST;
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(value = "/{id}/downVotes")
-    public ResponseEntity downVote(@PathVariable("id") Integer id) {
+    public HttpStatus downVote(@PathVariable("id") Integer id) {
         if (id != null) {
             Post post = postService.findOne(id);
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -211,19 +211,19 @@ public class PostController {
             Integer userId = user.getId();
 
             if(post == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return HttpStatus.NOT_FOUND;
             }
 
             if(!reactionService.checkIfReactionExists(userId, post)){
                 postService.downVote(userId, post);
-                return new ResponseEntity<>(HttpStatus.OK);
+                return HttpStatus.OK;
             }
             else {
                 reactionService.undoReaction(userId, post);
-                return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+                return HttpStatus.ACCEPTED;
             }
 
         }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return HttpStatus.BAD_REQUEST;
     }
 }
