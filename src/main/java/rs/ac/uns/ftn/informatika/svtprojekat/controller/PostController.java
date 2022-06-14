@@ -13,6 +13,7 @@ import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Reaction;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.ReactionTypeENUM;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTO;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTOandorid;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.*;
 
 import java.time.LocalDate;
@@ -47,6 +48,21 @@ public class PostController {
         for (Post p : posts) {
             System.out.println(p.toString());
             PostDTO post = new PostDTO(p);
+            post.setKarma(reactionService.getKarma(p));
+            postsDTO.add(post);
+        }
+
+        return new ResponseEntity<>(postsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/android")
+    public ResponseEntity<List<PostDTOandorid>> getPostsAndroid() {
+        List<Post> posts = postService.findAll();
+
+        List<PostDTOandorid> postsDTO = new ArrayList<>();
+        for (Post p : posts) {
+            System.out.println(p.toString());
+            PostDTOandorid post = new PostDTOandorid(p);
             post.setKarma(reactionService.getKarma(p));
             postsDTO.add(post);
         }
