@@ -90,7 +90,12 @@ public class PostController {
 
         post.setFlair(flairService.findOne(postDTO.getFlair().getId()));
         post.setCommunity(communityService.findOne(postDTO.getCommunity().getId()));
-        post.setUser(userService.findOne(postDTO.getUser().getId()));
+        if(postDTO.getUser().getId() == null) {
+            post.setUser(userService.findUserByUsername(postDTO.getUser().getUsername()));
+        }
+        else {
+            post.setUser(userService.findOne(postDTO.getUser().getId()));
+        }
 
         post.setCreationDate(date);
         post.setImagePath(postDTO.getImagePath());
@@ -112,6 +117,7 @@ public class PostController {
         reaction.setPost(post);
         reaction.setType(ReactionTypeENUM.UPVOTE);
         reaction.setUser(user);
+        //reaction.setUser(post.getUser());
         reaction.setTimestamp(ts);
         reactionService.save(reaction);
         postService.save(post);
