@@ -3,9 +3,11 @@ package rs.ac.uns.ftn.informatika.svtprojekat.service.implementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.RoleENUM;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.RegisterDTO;
+import rs.ac.uns.ftn.informatika.svtprojekat.repository.CommentRepository;
+import rs.ac.uns.ftn.informatika.svtprojekat.repository.PostRepository;
+import rs.ac.uns.ftn.informatika.svtprojekat.repository.ReactionRepository;
 import rs.ac.uns.ftn.informatika.svtprojekat.repository.UserRepository;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
 
@@ -17,6 +19,15 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private ReactionRepository reactionRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -74,5 +85,27 @@ public class UserServiceImpl implements UserService {
         newUser = repository.save(newUser);
 
         return newUser;
+    }
+
+    @Override
+    public int getKarma(User user) {
+        List<Post> posts = postRepository.findAllByUser(user);
+        List<Comment> comments = commentRepository.findAllByUser(user);
+        //TODO: isto ovo samo za komentare
+        int karma = 0;
+
+        for (Post post : posts) {
+            List<Reaction> reactions = reactionRepository.findAllByPost(post);
+            for (Reaction reaction : reactions) {
+                if (reaction.getType().equals(ReactionTypeENUM.UPVOTE)){
+                    karma = karma + 1;
+                }
+                else {
+                    karma = karma - 1;
+                }
+            }
+        }
+
+        return karma;
     }
 }

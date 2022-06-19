@@ -21,4 +21,6 @@ public interface UserService {
 
     User createUser(RegisterDTO registerDTO);
 
+    int getKarma(User user);
+
 }

@@ -19,6 +19,8 @@ public class UserDTO implements Serializable {
 
     private RoleENUM role;
 
+    private int karma;
+
     public UserDTO() {
     }
 

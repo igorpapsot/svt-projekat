@@ -55,15 +55,21 @@ public class UserController {
         return new ResponseEntity<>(usersDTO, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable("id") Integer id) {
-        User user = userService.findOne(id);
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @GetMapping(value = "/account")
+    public ResponseEntity<UserDTO> getUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+        rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        UserDTO retVal = new UserDTO(user);
+        int karma = userService.getKarma(user);
+        System.out.println(karma);
+        retVal.setKarma(karma);
 
-        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+        return new ResponseEntity<>( retVal, HttpStatus.OK);
     }
 
     @PostMapping(consumes = "application/json")
