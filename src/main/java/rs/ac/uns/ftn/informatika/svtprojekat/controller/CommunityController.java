@@ -81,7 +81,7 @@ public class CommunityController {
         }
 
         communityService.save(community);
-        moderatorService.save(moderator);
+        //moderatorService.save(moderator);
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.CREATED);
     }
 

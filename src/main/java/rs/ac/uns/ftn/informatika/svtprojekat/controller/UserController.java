@@ -98,18 +98,24 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @PutMapping(consumes = "application/json", value = "/changePassword")
-    public ResponseEntity changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+    @CrossOrigin(origins = "http://localhost:4200")
+    public HttpStatus changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         org.springframework.security.core.userdetails.User u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
         rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
         Integer userId = user.getId();
         if (userId == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return HttpStatus.NOT_FOUND;
         }
         else {
-            user.setPassword(passwordEncoder.encode(changePasswordDTO.getPassword()));
-            userService.save(user);
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            if( passwordEncoder.matches(changePasswordDTO.getPassword(), user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+                userService.save(user);
+                return HttpStatus.ACCEPTED;
+            }
+            else {
+                return HttpStatus.NOT_ACCEPTABLE;
+            }
         }
 
     }
@@ -154,6 +160,57 @@ public class UserController {
             user.setBanned(changeUserDTO.isBanned());
             userService.save(user);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PutMapping(consumes = "text/plain", value = "/displayName")
+    public HttpStatus changeDisplayName(@RequestBody String displayName) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+        rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+        Integer userId = user.getId();
+        if (userId == null) {
+            return HttpStatus.NOT_FOUND;
+        }
+        else {
+            if(displayName.length() > 5) {
+                user.setDisplayName(displayName);
+                userService.save(user);
+                return HttpStatus.ACCEPTED;
+            }
+            else {
+                System.out.println(displayName.length());
+                System.out.println(displayName);
+                return HttpStatus.NOT_ACCEPTABLE;
+            }
+
+        }
+
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PutMapping(consumes = "text/plain", value = "/description")
+    public HttpStatus changeDescription(@RequestBody String description) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+        rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+        Integer userId = user.getId();
+        if (userId == null) {
+            return HttpStatus.NOT_FOUND;
+        }
+        else {
+            if(description.length() > 10) {
+                user.setDescription(description);
+                userService.save(user);
+                return HttpStatus.ACCEPTED;
+            }
+            else {
+                return  HttpStatus.NOT_ACCEPTABLE;
+            }
         }
 
     }

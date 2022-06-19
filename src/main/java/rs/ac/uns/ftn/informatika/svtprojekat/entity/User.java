@@ -52,6 +52,12 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private RoleENUM role;
 
+    @Column(name = "displayName")
+    private String displayName;
+
+    @Column(name = "description")
+    private String description;
+
     @OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "user")
     private Set<Moderator> moderators = new HashSet<Moderator>();
 

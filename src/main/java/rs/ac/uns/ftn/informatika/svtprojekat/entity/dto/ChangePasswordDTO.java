@@ -6,7 +6,11 @@ import rs.ac.uns.ftn.informatika.svtprojekat.entity.User;
 @Data
 public class ChangePasswordDTO {
 
+    private String newPassword;
+
     private String password;
+
+    private String repeatPassword;
 
     public ChangePasswordDTO() {
     }
