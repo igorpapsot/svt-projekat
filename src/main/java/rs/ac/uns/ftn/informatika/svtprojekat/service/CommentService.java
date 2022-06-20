@@ -19,4 +19,6 @@ public interface CommentService {
 
     List<Comment> findAllByPost(Post post);
 
+    void deleteAllByPost(Post post);
+
 }

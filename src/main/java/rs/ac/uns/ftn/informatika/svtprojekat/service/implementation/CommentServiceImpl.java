@@ -22,7 +22,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment findOne(Integer id) {
-        return null;
+        return repository.findById(id).orElse(null);
     }
 
     @Override
@@ -38,11 +38,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void remove(Integer id) {
-
+        repository.deleteById(id);
     }
 
     @Override
     public List<Comment> findAllByPost(Post post) {
         return repository.findAllByPost(post);
+    }
+
+    @Override
+    public void deleteAllByPost(Post post) {
+        repository.deleteByPost(post);
     }
 }
