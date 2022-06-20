@@ -7,11 +7,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Moderator;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.CommunityDTO;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.SuspendCommunityDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.CommunityService;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.ModeratorService;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.UserService;
@@ -56,6 +56,7 @@ public class CommunityController {
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
     }
 
+    @Transactional
     @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping
@@ -81,7 +82,7 @@ public class CommunityController {
         }
 
         communityService.save(community);
-        //moderatorService.save(moderator);
+        moderatorService.save(moderator);
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.CREATED);
     }
 
@@ -127,13 +128,18 @@ public class CommunityController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @CrossOrigin(origins = "http://localhost:4200")
-    @PutMapping(value = "/{id}/suspend")
-    public ResponseEntity<CommunityDTO> suspend(@PathVariable("id") Integer id, @RequestBody SuspendCommunityDTO suspendCommunityDTO){
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(consumes = "text/plain", value = "/{id}/suspend")
+    public ResponseEntity<CommunityDTO> suspend(@PathVariable("id") Integer id, @RequestBody String reason){
         Community community = communityService.findOne(id);
         community.setSuspended(true);
-        community.setSuspendedReason(suspendCommunityDTO.getSuspendedReason());
+        community.setSuspendedReason(reason);
+
+        List<Moderator> moderators = moderatorService.findAllBycommunity(community);
+        for(Moderator m : moderators) {
+            moderatorService.remove(m.getId());
+        }
 
         if(community == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

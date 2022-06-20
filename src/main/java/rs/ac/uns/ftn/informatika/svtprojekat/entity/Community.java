@@ -1,11 +1,8 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -66,12 +63,12 @@ public class Community implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Community)) return false;
         Community community = (Community) o;
-        return isSuspended() == community.isSuspended() && Objects.equals(getId(), community.getId()) && Objects.equals(getName(), community.getName()) && Objects.equals(getDescription(), community.getDescription()) && Objects.equals(getCreationDate(), community.getCreationDate()) && Objects.equals(getSuspendedReason(), community.getSuspendedReason()) && Objects.equals(getFlairs(), community.getFlairs()) && Objects.equals(getModerators(), community.getModerators()) && Objects.equals(getRules(), community.getRules());
+        return isSuspended() == community.isSuspended() && Objects.equals(getId(), community.getId()) && Objects.equals(getName(), community.getName()) && Objects.equals(getDescription(), community.getDescription()) && Objects.equals(getCreationDate(), community.getCreationDate()) && Objects.equals(getSuspendedReason(), community.getSuspendedReason()) && Objects.equals(getFlairs(), community.getFlairs()) && Objects.equals(getRules(), community.getRules());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getDescription(), getCreationDate(), isSuspended(), getSuspendedReason(), getFlairs(), getModerators(), getRules());
+        return Objects.hash(getId(), getName(), getDescription(), getCreationDate(), isSuspended(), getSuspendedReason(), getFlairs(), getRules());
     }
 
     @Override

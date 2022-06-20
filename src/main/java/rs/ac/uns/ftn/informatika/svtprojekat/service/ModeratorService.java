@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.service;
 
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Moderator;
 
 import java.util.List;
@@ -15,5 +16,7 @@ public interface ModeratorService {
     Moderator save(Moderator moderator);
 
     void remove(Integer id);
+
+    List<Moderator> findAllBycommunity(Community community);
 
 }

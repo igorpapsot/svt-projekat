@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.informatika.svtprojekat.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Moderator;
 import rs.ac.uns.ftn.informatika.svtprojekat.repository.ModeratorRepository;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.ModeratorService;
@@ -37,6 +38,11 @@ public class ModeratorServiceImpl implements ModeratorService {
 
     @Override
     public void remove(Integer id) {
+        repository.deleteById(id);
+    }
 
+    @Override
+    public List<Moderator> findAllBycommunity(Community community) {
+        return repository.findAllByCommunity(community);
     }
 }

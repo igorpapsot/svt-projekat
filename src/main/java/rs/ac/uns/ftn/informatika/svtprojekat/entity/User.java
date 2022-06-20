@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
@@ -64,4 +65,32 @@ public class User implements Serializable {
     public User() {
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return isBanned() == user.isBanned() && Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getAvatar(), user.getAvatar()) && Objects.equals(getRegistrationDate(), user.getRegistrationDate()) && getRole() == user.getRole() && Objects.equals(getDisplayName(), user.getDisplayName()) && Objects.equals(getDescription(), user.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername(), getPassword(), getEmail(), getAvatar(), getRegistrationDate(), isBanned(), getRole(), getDisplayName(), getDescription());
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", isBanned=" + isBanned +
+                ", role=" + role +
+                ", displayName='" + displayName + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
