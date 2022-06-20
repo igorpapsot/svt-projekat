@@ -9,9 +9,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.Comment;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Reaction;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.ReactionTypeENUM;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.CommentDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTOandorid;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.*;
@@ -38,6 +40,9 @@ public class PostController {
 
     @Autowired
     private ReactionService reactionService;
+
+    @Autowired
+    private CommentService commentService;
 
 
     @GetMapping
@@ -247,5 +252,52 @@ public class PostController {
 
         }
         return HttpStatus.BAD_REQUEST;
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping(value = "/{id}/comments")
+    public ResponseEntity<List<CommentDTO>> getComments(@PathVariable("id") Integer id) {
+        Post post = postService.findOne(id);
+        List<Comment> comments = commentService.findAllByPost(post);
+
+        List<CommentDTO> commentsDTO = new ArrayList<>();
+        for (Comment c : comments) {
+            System.out.println(c.toString());
+            CommentDTO comment = new CommentDTO(c);
+            commentsDTO.add(comment);
+        }
+
+        return new ResponseEntity<>(commentsDTO, HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping(value = "/{id}/comments")
+    public HttpStatus postComment(@PathVariable("id") Integer id, @RequestBody CommentDTO commentDTO) {
+
+        if(id != null){
+            if(commentDTO.getText() == null){
+                return HttpStatus.NOT_ACCEPTABLE;
+            }
+            else {
+                Comment comment = new Comment();
+                Post post = postService.findOne(id);
+
+                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                User u = (User) auth.getPrincipal();
+                rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+
+                comment.setPost(post);
+                comment.setText(commentDTO.getText());
+                comment.setUser(user);
+                comment.setDeleted(false);
+                comment.setTimestamp(LocalDate.now());
+                commentService.save(comment);
+                return HttpStatus.OK;
+            }
+        }
+        else {
+            return  HttpStatus.BAD_REQUEST;
+        }
+
     }
 }

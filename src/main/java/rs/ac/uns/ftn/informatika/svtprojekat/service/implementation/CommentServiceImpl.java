@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.informatika.svtprojekat.service.implementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Comment;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.repository.CommentRepository;
 import rs.ac.uns.ftn.informatika.svtprojekat.service.CommentService;
 
@@ -31,11 +32,17 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment save(Comment comment) {
-        return null;
+         repository.save(comment);
+         return comment;
     }
 
     @Override
     public void remove(Integer id) {
 
+    }
+
+    @Override
+    public List<Comment> findAllByPost(Post post) {
+        return repository.findAllByPost(post);
     }
 }

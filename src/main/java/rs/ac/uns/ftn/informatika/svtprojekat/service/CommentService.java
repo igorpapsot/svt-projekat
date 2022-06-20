@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.informatika.svtprojekat.service;
 
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Comment;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ public interface CommentService {
     Comment save(Comment comment);
 
     void remove(Integer id);
+
+    List<Comment> findAllByPost(Post post);
 
 }
