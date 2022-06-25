@@ -194,7 +194,7 @@ public class PostController {
             commentService.deleteAllByPost(post);
             reactionService.deleteAllbyPost(post);
             postService.remove(post.getId());
-            
+
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -265,10 +265,65 @@ public class PostController {
         for (Comment c : comments) {
             System.out.println(c.toString());
             CommentDTO comment = new CommentDTO(c);
+            comment.setKarma(reactionService.getCommentKarma(c));
             commentsDTO.add(comment);
         }
 
         return new ResponseEntity<>(commentsDTO, HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PostMapping(value = "/{id}/comments/{commentId}/upVotes")
+    public HttpStatus upVoteComment(@PathVariable("id") Integer id, @PathVariable("commentId") Integer commentId) {
+        if (id != null && commentId != null) {
+            Comment comment = commentService.findOne(commentId);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            User u = (User) auth.getPrincipal();
+            rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+            Integer userId = user.getId();
+
+            if(comment == null) {
+                return HttpStatus.NOT_FOUND;
+            }
+
+            if(!reactionService.checkIfReactionExists(userId, comment)){
+                reactionService.upVoteComment(userId, comment);
+                return HttpStatus.OK;
+            }
+            else {
+                reactionService.undoReaction(userId, comment);
+                return HttpStatus.ACCEPTED;
+            }
+        }
+        return HttpStatus.BAD_REQUEST;
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PostMapping(value = "/{id}/comments/{commentId}/downVotes")
+    public HttpStatus downVoteComment(@PathVariable("id") Integer id, @PathVariable("commentId") Integer commentId) {
+        if (id != null && commentId != null) {
+            Comment comment = commentService.findOne(commentId);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            User u = (User) auth.getPrincipal();
+            rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
+            Integer userId = user.getId();
+
+            if(comment == null) {
+                return HttpStatus.NOT_FOUND;
+            }
+
+            if(!reactionService.checkIfReactionExists(userId, comment)){
+                reactionService.downVoteComment(userId, comment);
+                return HttpStatus.OK;
+            }
+            else {
+                reactionService.undoReaction(userId, comment);
+                return HttpStatus.ACCEPTED;
+            }
+        }
+        return HttpStatus.BAD_REQUEST;
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
@@ -303,6 +358,7 @@ public class PostController {
 
     }
 
+    @Transactional
     @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping(value = "/{id}/comments/{commentId}")
     @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
@@ -322,6 +378,7 @@ public class PostController {
                 rs.ac.uns.ftn.informatika.svtprojekat.entity.User user = userService.findUserByUsername(u.getUsername());
 
                 if(user.getId().equals(comment.getUser().getId())) {
+                    reactionService.deleteAllbyComment(comment);
                     commentService.remove(commentId);
                     return HttpStatus.OK;
                 }

@@ -26,7 +26,11 @@ public class PostDTOandorid {
 
     private Integer communityId;
 
+    private Integer flairId;
+
     private int karma;
+
+    private String username;
 
     public PostDTOandorid() {
     }
@@ -41,6 +45,8 @@ public class PostDTOandorid {
         this.flairName = flair.getName();
         this.communityName = community.getName();
         this.communityId = community.getId();
+        this.flairId = flair.getId();
+        this.username = user.getUsername();
     }
 
     public PostDTOandorid(Post post) {

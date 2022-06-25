@@ -21,6 +21,8 @@ public class CommentDTO implements Serializable {
 
     private PostDTO post;
 
+    private int karma;
+
     public CommentDTO() {
     }
 
