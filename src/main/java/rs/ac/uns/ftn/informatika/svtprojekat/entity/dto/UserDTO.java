@@ -21,18 +21,24 @@ public class UserDTO implements Serializable {
 
     private int karma;
 
+    private String description;
+
+    private String displayName;
+
     public UserDTO() {
     }
 
-    public UserDTO(Integer id, String username, String avatar, boolean isBanned, RoleENUM role) {
+    public UserDTO(Integer id, String username, String avatar, boolean isBanned, RoleENUM role, String description, String displayName) {
         this.id = id;
         this.username = username;
         this.avatar = avatar;
         this.isBanned = isBanned;
         this.role = role;
+        this.description = description;
+        this.displayName = displayName;
     }
 
     public UserDTO(User user) {
-        this(user.getId(), user.getUsername(), user.getAvatar(), user.isBanned(), user.getRole());
+        this(user.getId(), user.getUsername(), user.getAvatar(), user.isBanned(), user.getRole(), user.getDescription(), user.getDisplayName());
     }
 }

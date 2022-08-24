@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.informatika.svtprojekat.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.Community;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.Reaction;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.ReactionTypeENUM;
@@ -36,6 +37,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public List<Post> findAllFromCommunity(Community community) {
+        return repository.findAllByCommunity(community);
     }
 
     @Override

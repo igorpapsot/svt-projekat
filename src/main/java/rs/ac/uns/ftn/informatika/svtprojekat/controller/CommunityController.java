@@ -86,7 +86,7 @@ public class CommunityController {
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<CommunityDTO> putCommunity(@RequestBody CommunityDTO communityDTO, @PathVariable("id") Integer id){
         if (communityDTO.getId() != null) {

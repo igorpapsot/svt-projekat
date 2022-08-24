@@ -9,10 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Comment;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Post;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.Reaction;
-import rs.ac.uns.ftn.informatika.svtprojekat.entity.ReactionTypeENUM;
+import rs.ac.uns.ftn.informatika.svtprojekat.entity.*;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.CommentDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTO;
 import rs.ac.uns.ftn.informatika.svtprojekat.entity.dto.PostDTOandorid;
@@ -48,6 +45,22 @@ public class PostController {
     @GetMapping
     public ResponseEntity<List<PostDTO>> getPosts() {
         List<Post> posts = postService.findAll();
+
+        List<PostDTO> postsDTO = new ArrayList<>();
+        for (Post p : posts) {
+            System.out.println(p.toString());
+            PostDTO post = new PostDTO(p);
+            post.setKarma(reactionService.getKarma(p));
+            postsDTO.add(post);
+        }
+
+        return new ResponseEntity<>(postsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/community/{id}")
+    public ResponseEntity<List<PostDTO>> getPostsFromCommunity(@PathVariable("id") Integer communityId) {
+        Community community = communityService.findOne(communityId);
+        List<Post> posts = postService.findAllFromCommunity(community);
 
         List<PostDTO> postsDTO = new ArrayList<>();
         for (Post p : posts) {
